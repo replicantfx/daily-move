@@ -2,7 +2,7 @@
 // Serves everything from the cache first so the app opens instantly and works offline,
 // then refreshes the cache in the background so the next launch picks up new versions.
 // Bump VERSION when the list of files below changes.
-const VERSION = "v1";
+const VERSION = "v2";
 const CACHE = `daily-move-${VERSION}`;
 const FILES = [
   "./",

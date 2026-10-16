@@ -131,6 +131,10 @@ input[type=range]{width:100%;accent-color:var(--saffron);height:28px}
 .mcard small{color:var(--muted);font-size:12px}
 .mcard .hzs{font-family:var(--f-display);color:var(--saffron);font-size:13px}
 
+.saying{margin:4px 0;padding:14px 0 2px;border-top:1px solid var(--line);display:grid;gap:4px}
+.saying blockquote{margin:0;font-family:var(--f-display);font-size:22px;font-weight:700;color:var(--saffron);letter-spacing:.08em}
+.saying figcaption{font-size:14px;color:var(--ink)}
+.saying small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
 .note{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:18px;display:flex;gap:10px;align-items:flex-start;max-width:75ch}
 
 /* sheet */
@@ -325,6 +329,7 @@ input[type=range]{width:100%;accent-color:var(--saffron);height:28px}
       <div class="seal" aria-hidden="true">功</div>
       <h2>Practice complete</h2>
       <p class="muted" style="margin:0" id="doneMsg">Carry this ease into the rest of your day.</p>
+      <div id="doneSaying"></div>
       <div class="done-stats"><div><b class="num" id="doneMin">0</b><span>minutes</span></div><div><b class="num" id="doneStreak">0</b><span>day streak</span></div></div>
       <button class="btn" id="doneBtn">Return home</button>
     </div>
@@ -342,8 +347,8 @@ const saveSettings=()=>store.set("settings",settings);
 /* ---------------- figure model ---------------- */
 const D=Math.PI/180;
 const LEN={torso:52,neck:7,head:11,ua:29,la:27,th:40,sh:40,hipW:9,shW:16};
-const FRONT={hx:0,hy:80,torso:180,arch:0,neck:180,face:0,glow:0,uaL:-10,laL:-6,uaR:10,laR:6,fL:[-11,0],fR:[11,0],kL:[-1,.15],kR:[1,.15]};
-const SIDE={hx:0,hy:80,torso:180,arch:0,neck:180,face:1,glow:0,uaL:-4,laL:4,uaR:4,laR:10,fL:[-3,0],fR:[3,0],kL:[1,.1],kR:[1,.1]};
+const FRONT={hx:0,hy:80,torso:180,arch:0,neck:180,face:0,glow:0,px:1,suaL:1,slaL:1,suaR:1,slaR:1,uaL:-10,laL:-6,uaR:10,laR:6,fL:[-11,0],fR:[11,0],kL:[-1,.15],kR:[1,.15]};
+const SIDE={hx:0,hy:80,torso:180,arch:0,neck:180,face:1,glow:0,px:1,suaL:1,slaL:1,suaR:1,slaR:1,uaL:-4,laL:4,uaR:4,laR:10,fL:[-3,0],fR:[3,0],kL:[1,.1],kR:[1,.1]};
 const HIPS_F={uaL:-40,laL:50,uaR:40,laR:-50};
 const CHAMBER={uaL:-30,laL:25,uaR:30,laR:-25};
 const BELLY={uaL:-20,laL:70,uaR:20,laR:-70};
@@ -492,6 +497,83 @@ const MOVES=[
  setup:"Stand tall on one leg. Swing the other leg forward and back like a pendulum.",
  cues:["Start small and let the swing grow.","The standing leg stays strong. The torso stays upright.","Hold a wall if balance is a challenge today."],
  about:"Dynamic hip opening used before kicks in Shaolin training."},
+{id:"paida",name:"Patting the Meridians",hz:"拍打经络",py:"Pāidǎ Jīngluò",view:"front",tags:["selfcare","warm"],
+ keys:[{uaL:35,laL:148,uaR:25,laR:20},{uaR:-35,laR:-148,uaL:-25,laL:-20},{uaL:-12,laL:2,uaR:12,laR:-2}],beats:[.9,.9,.9],breath:["flow","flow","flow"],
+ setup:"Stand loose. Use cupped palms to pat the opposite shoulder, then the other, then the outsides of the thighs.",
+ cues:["Pat firmly but kindly. Cupped hands make a hollow sound.","Work down the inside of the arm and back up the outside.","Pat the lower back and the backs of the legs too."],
+ about:"The rhythmic slapping you hear in every Chinese park at dawn. It wakes up the skin and muscles and gets the blood moving."},
+{id:"xilian",name:"Dry Face Washing",hz:"干洗脸",py:"Gān Xǐ Liǎn",view:"front",tags:["selfcare"],
+ base:{suaL:.5,slaL:.9,suaR:.5,slaR:.9},keys:[{uaL:10,laL:165,uaR:-10,laR:-165},{uaL:-190,laL:172,uaR:190,laR:-172,suaL:.4,slaL:.5,suaR:.4,slaR:.5}],
+ beats:[1.3,1.3],breath:["in","out"],
+ setup:"Rub the palms together until they are warm. Then sweep them up the face from chin to forehead and back down.",
+ cues:["Warm the hands again whenever they cool.","Sweep over the eyes gently. Let the warmth sink in.","Finish by sweeping back over the ears and down the neck."],
+ about:"A self-massage from the old longevity routines, said to keep the face bright. It relaxes the jaw and the small muscles around the eyes."},
+{id:"mingtiangu",name:"Beating the Heavenly Drum",hz:"鸣天鼓",py:"Míng Tiān Gǔ",view:"front",tags:["selfcare"],
+ base:{uaL:-120,laL:107,uaR:120,laR:-107},keys:[{},{laL:113,laR:-113}],beats:[.45,.45],breath:["flow","flow"],
+ setup:"Cover the ears with the palms, fingers resting on the back of the head. Tap the base of the skull with the fingers.",
+ cues:["Index finger slides off the middle finger to make a small drumbeat.","You should hear a soft thud inside the head.","Twenty-four taps, then release the palms quickly."],
+ about:"A classic Daoist health exercise. Many grandparents do it every morning to settle the head and ease neck tension."},
+{id:"roufu",name:"Belly Circles",hz:"摩腹",py:"Mó Fù",view:"front",tags:["selfcare","breath"],
+ base:{glow:.6},keys:[{uaL:-15,laL:60,uaR:15,laR:-60},{uaL:-8,laL:70,uaR:22,laR:-48},{uaL:-22,laL:82,uaR:22,laR:-82},{uaL:-22,laL:48,uaR:8,laR:-70}],
+ beats:[1.3,1.3,1.3,1.3],breath:["flow","flow","flow","flow"],
+ setup:"Stack the hands over the navel. Circle them slowly clockwise around the belly.",
+ cues:["Clockwise follows the path of digestion.","Let the circle grow wider, then smaller again.","Thirty-six circles is the traditional count."],
+ about:"Abdominal massage, an old remedy after meals and before sleep. Gentle pressure that calms digestion."},
+{id:"zhuangbei",name:"Back Against the Tree",hz:"撞背",py:"Zhuàng Bèi",view:"side",tags:["selfcare","spine"],prop:{type:"tree",x:-30},
+ keys:[{torso:182},{torso:200,neck:190}],beats:[1.4,1],breath:["in","out"],
+ setup:"Stand a short step in front of a tree or wall. Let the upper back fall gently against it, then rebound.",
+ cues:["Make contact with the upper back, between the shoulder blades. Never the head or neck.","Keep it light. A soft bump, not a hit.","Skip this one if you have osteoporosis or back problems."],
+ about:"A familiar park sight: grandparents gently bumping their backs against a tree. It loosens a stiff upper back."},
+{id:"hang",name:"Hanging from the Bar",hz:"吊单杠",py:"Diào Dāngàng",view:"front",tags:["stretch","shoulders","spine"],prop:{type:"bar",h:190},
+ base:{uaL:-172,laL:-176,uaR:172,laR:176,hy:84,fL:[-7,4],fR:[7,4]},keys:[{},{hx:2,fL:[-6,5],fR:[8,4]}],beats:[4,4],breath:["soft","soft"],
+ setup:"Grip an overhead bar and let your body hang. Keep the toes on the ground if you are new to it.",
+ cues:["Let the spine lengthen with gravity. Relax the legs.","Keep a gentle grip. Shoulders can stay slightly engaged.","Step down before your grip tires."],
+ about:"Hanging decompresses the spine and opens the shoulders. Every park exercise corner has a bar for this."},
+{id:"yatui",name:"Leg on the Rail",hz:"正压腿",py:"Zhèng Yā Tuǐ",view:"side",tags:["stretch","hips","legs"],sides:true,prop:{type:"rail",x:40,h:79},
+ base:{hx:-40,fL:[-42,0],thR:92,shR:90},
+ keys:[{uaL:172,laL:176,uaR:175,laR:178},{torso:108,neck:98,uaL:74,laL:12,uaR:70,laR:8},{torso:104,neck:95,uaL:74,laL:12,uaR:70,laR:8}],
+ beats:[4,8,4],breath:["out","soft","in"],
+ setup:"Rest one heel on a rail or bench at a comfortable height. Reach up, then fold forward over the straight leg.",
+ cues:["Lead with the chest toward the toes. Keep the back long.","Both legs straight but not locked. Hips square to the rail.","Stretch to mild tension only. Breathe and let the leg release."],
+ about:"Yā tuǐ, pressing the leg: the most classic park stretch, and the first thing martial arts students learn. Lengthens the hamstrings and calves."},
+{id:"ceyatui",name:"Side Leg on the Rail",hz:"侧压腿",py:"Cè Yā Tuǐ",view:"front",tags:["stretch","hips","legs"],sides:true,prop:{type:"rail",x:53,h:77},
+ base:{hx:-36,fL:[-47,0],thR:90,shR:90},
+ keys:[{uaL:-172,laL:-176,uaR:20,laR:25},{torso:125,neck:115,arch:4,uaL:-215,laL:-235,uaR:75,laR:85},{torso:120,neck:112,arch:4,uaL:-215,laL:-235,uaR:75,laR:85}],
+ beats:[4,8,4],breath:["out","soft","in"],
+ setup:"Stand side-on to the rail and rest one heel on it. Reach the opposite arm overhead and bend sideways toward the raised foot.",
+ cues:["Open the chest to the front. Don't fold forward.","The standing foot points forward, knee soft.","Feel the stretch from the inner thigh up through the ribs."],
+ about:"The side version of the leg press. Opens the inner thighs and the whole side of the body."},
+{id:"lilajin",name:"Doorway Lajin",hz:"立位拉筋",py:"Lì Wèi Lā Jīn",view:"side",tags:["stretch","shoulders","hips"],sides:true,prop:{type:"door",x:-18,h:200},
+ base:{fR:[34,0],fL:[-38,0]},
+ keys:[{hy:76,torso:178,uaL:200,laL:196,uaR:200,laR:196},{hx:8,hy:68,torso:166,neck:170,uaL:225,laL:220,uaR:225,laR:220},{hx:9,hy:67,torso:165,neck:170,uaL:225,laL:220,uaR:225,laR:220}],
+ beats:[4,8,4],breath:["out","soft","in"],
+ setup:"Stand in a doorway with both hands on the frame above your head. Step one foot forward and let the chest move through.",
+ cues:["Back leg straight, heel down. Front knee bends.","Let the chest open forward. Keep the head in line with the spine.","Ease out slowly if the shoulders or hands tingle."],
+ about:"Standing lājīn, stretching the sinews. A popular home stretch for the shoulders, chest, and the front of the hips."},
+{id:"wolajin",name:"Lying Lajin",hz:"卧位拉筋",py:"Wò Wèi Lā Jīn",view:"side",tags:["stretch","hips","legs","floor"],sides:true,floor:true,prop:{type:"door",x:24,h:150},
+ base:{hx:16,hy:10,torso:-90,neck:-84,uaL:-92,laL:-92,uaR:-90,laR:-90,thL:95,shL:92},keys:[{thR:176,shR:176},{thR:179,shR:179}],beats:[5,5],breath:["soft","soft"],
+ setup:"Lie on your back in a doorway. Rest one leg up the door frame and let the other lie long through the doorway. Arms overhead.",
+ cues:["Shuffle closer to the frame for more stretch, further away for less.","Keep the lower leg flat and relaxed on the floor.","Breathe slowly. Let gravity do the work."],
+ about:"Lying lājīn, the stretch behind the saying that lengthening the sinews by an inch adds ten years of life. A deep, passive stretch for the back of the leg and the opposite hip."},
+{id:"dilunge",name:"Kneeling Lunge",hz:"跪姿弓步",py:"Guìzī Gōngbù",view:"side",tags:["stretch","hips","floor"],sides:true,
+ base:{fR:[42,0],fL:[-50,3],kL:[0,-1],hy:38},
+ keys:[{uaL:42,laL:42,uaR:42,laR:42},{hx:10,hy:33,torso:178,uaL:176,laL:178,uaR:178,laR:180},{hx:11,hy:32,torso:176,uaL:176,laL:178,uaR:178,laR:180}],
+ beats:[4,8,4],breath:["out","soft","in"],
+ setup:"Kneel on one knee with the other foot forward. Let the hips sink forward, then lift the arms overhead.",
+ cues:["Tuck the tailbone slightly. Feel the stretch at the front of the back hip.","Front knee stays over the ankle.","Pad the back knee if the floor is hard."],
+ about:"Opens the hip flexors that shorten with sitting. A gentler, held version of the bow stance."},
+{id:"baoxi",name:"Knee Hug",hz:"抱膝",py:"Bào Xī",view:"side",tags:["stretch","spine","floor"],floor:true,
+ base:{hx:12,hy:10,torso:-90,neck:-84},
+ keys:[{uaL:138,laL:138,uaR:140,laR:140,thL:-148,shL:100,thR:-150,shR:102},{uaL:128,laL:132,uaR:130,laR:134,thL:-160,shL:95,thR:-162,shR:97}],
+ beats:[2.5,2.5],breath:["out","in"],
+ setup:"Lie on your back and hug both knees into the chest.",
+ cues:["Exhale and draw the knees a little closer.","Let the lower back sink into the floor.","Rock gently side to side if it feels good."],
+ about:"A simple release for the lower back after a day of standing or sitting."},
+{id:"kneel",name:"Kneeling Sit",hz:"跪坐",py:"Guì Zuò",view:"side",tags:["stretch","legs","floor"],floor:true,
+ base:{hy:18,fL:[-4,3],fR:[-2,3],kL:[1,-.3],kR:[1,-.3],uaL:12,laL:14,uaR:13,laR:15},keys:[{},{torso:186,neck:184}],beats:[5,5],breath:["soft","soft"],
+ setup:"Kneel and sit back on your heels with the tops of the feet flat on the floor. Hands rest on the thighs.",
+ cues:["Sit tall. Let the weight settle into the heels.","Put a folded towel under the ankles or between the hips and heels if it is too intense.","Come out slowly and shake out the legs."],
+ about:"Stretches the fronts of the ankles, shins and thighs. Easy to lose with age, and easy to keep with a minute a day."},
 {id:"dantian",name:"Dantian Breathing",hz:"丹田呼吸",py:"Dāntián Hūxī",view:"front",tags:["breath"],
  base:{uaL:-15,laL:60,uaR:15,laR:-60,hy:79,fL:[-12,0],fR:[12,0],glow:.35},keys:[{},{glow:1}],beats:[6,4],breath:["out","in"],
  setup:"Stand or sit comfortably. Rest the hands over the lower belly, just below the navel.",
@@ -501,7 +583,7 @@ const MOVES=[
 const M=Object.fromEntries(MOVES.map(m=>[m.id,m]));
 MOVES.forEach(m=>{const B=m.view==="side"?SIDE:FRONT;const base=Object.assign({},B,m.base||{});m.K=m.keys.map(k=>Object.assign({},base,k));m.C=m.beats.reduce((a,b)=>a+b,0)});
 
-const TAGS={warm:"Warm-up",brocade:"Eight Brocades",stance:"Stances",spine:"Spine",hips:"Hips",shoulders:"Neck & shoulders",legs:"Legs",breath:"Breath",balance:"Balance",floor:"Floor"};
+const TAGS={stretch:"Deep stretch",selfcare:"Self-care",warm:"Warm-up",brocade:"Eight Brocades",stance:"Stances",spine:"Spine",hips:"Hips",shoulders:"Neck & shoulders",legs:"Legs",breath:"Breath",balance:"Balance",floor:"Floor"};
 
 const ROUTINES=[
 {id:"dawn",name:"Dawn Awakening",hz:"晨起",focus:"Wake up",feat:"heavens",desc:"Swing, open and lengthen. A short sequence to start the day.",
@@ -514,6 +596,12 @@ const ROUTINES=[
  items:[["waist",60],["tiger",90],["butterfly",90],["seatfold",90],["sidebend",60],["squat",60],["pubu",60],["dantian",60]]},
 {id:"evening",name:"Evening Unwinding",hz:"夜静",focus:"Calm",feat:"seatfold",desc:"Downshift before sleep. Long exhales and gentle folds.",
  items:[["cloud",90],["sidebend",60],["owl",45],["tiger",75],["butterfly",75],["seatfold",90],["dantian",120]]},
+{id:"park",name:"Park Morning",hz:"公园晨练",focus:"Self-care",feat:"yatui",saying:1,desc:"What the grandparents do in every Chinese park at dawn: patting, face washing, a leg on the rail, a hang from the bar.",
+ items:[["paida",60],["xilian",40],["mingtiangu",40],["swing",60],["waist",45],["zhuangbei",45],["yatui",120],["ceyatui",120],["hang",45],["squat",45],["roufu",60],["dantian",45]]},
+{id:"quicklajin",name:"Quick Lajin",hz:"小拉筋",focus:"Deep stretch",feat:"lilajin",saying:0,desc:"Ten minutes of long holds for the legs, hips and shoulders.",
+ items:[["swing",45],["lilajin",90],["yatui",120],["dilunge",120],["wolajin",120],["baoxi",60]]},
+{id:"lajin",name:"Lajin Deep Stretch",hz:"拉筋",focus:"Deep stretch",feat:"wolajin",saying:0,desc:"Slow, deep stretching held for minutes at a time. Lengthen the sinews from shoulders to ankles.",
+ items:[["wings",45],["waist",45],["lilajin",120],["yatui",150],["ceyatui",150],["dilunge",150],["wolajin",180],["seatfold",90],["butterfly",90],["baoxi",60],["kneel",60],["dantian",60]]},
 {id:"brocades",name:"The Eight Brocades",hz:"八段锦",focus:"Classic set",feat:"bow",desc:"Ba Duan Jin, the classic eight-movement qigong set, with a standing close.",
  items:[["heavens",75],["bow",90],["separate",75],["owl",60],["sway",75],["climb",75],["fists",75],["bounce",45],["post",60]]},
 {id:"stances",name:"Rooted Stances",hz:"马步功",focus:"Legs & hips",feat:"horse",desc:"Shaolin stance training for strong legs and open hips.",
@@ -521,6 +609,13 @@ const ROUTINES=[
 {id:"temple",name:"Full Temple Morning",hz:"少林早课",focus:"Complete",feat:"crane",desc:"The full practice: joint opening, all eight Brocades, stances, and standing meditation.",
  items:[["swing",60],["neck",45],["wings",45],["waist",45],["knees",45],["legswing",60],["heavens",75],["bow",90],["separate",75],["owl",60],["sway",75],["climb",75],["fists",75],["bounce",45],["horse",90],["bowstance",120],["pubu",90],["crane",90],["tiger",75],["seatfold",75],["post",150],["dantian",90]]}
 ];
+/* old sayings about health and movement: [hanzi, pinyin, meaning] */
+const SAYINGS=[["筋长一寸，寿延十年","Jīn cháng yī cùn, shòu yán shí nián","Lengthen the sinews an inch, and add ten years to your life."],
+ ["流水不腐，户枢不蠹","Liú shuǐ bù fǔ, hù shū bù dù","Running water never goes stale, and a door hinge never rots."],
+ ["人老先老腿","Rén lǎo xiān lǎo tuǐ","A person grows old from the legs first."],
+ ["饭后百步走，活到九十九","Fàn hòu bǎi bù zǒu, huó dào jiǔshíjiǔ","Walk a hundred steps after each meal and you will live to ninety-nine."],
+ ["冬练三九，夏练三伏","Dōng liàn sān jiǔ, xià liàn sān fú","Train in the deepest cold of winter and the fiercest heat of summer."]];
+const sayingHTML=q=>`<figure class="saying"><blockquote>${esc(q[0])}</blockquote><figcaption>${esc(q[2])}<small>${esc(q[1])}</small></figcaption></figure>`;
 const PREP_FIRST=8;
 const routineSecs=r=>r.items.reduce((a,[,s])=>a+s,0)+PREP_FIRST+(r.items.length-1)*settings.prep;
 const fmtMin=s=>Math.max(1,Math.round(s/60));
@@ -530,9 +625,9 @@ const fmt=s=>{s=Math.max(0,Math.ceil(s));return Math.floor(s/60)+":"+String(s%60
 const ease=u=>.5-.5*Math.cos(Math.PI*u);
 function lerpPose(a,b,u){const o={};for(const k in a){const x=a[k],y=b[k];if(typeof x==="number")o[k]=x+((y??x)-x)*u;else if(Array.isArray(x))o[k]=x.map((v,i)=>v+(((y||x)[i])-v)*u);else o[k]=x}return o}
 function mirror(p,view){const q=Object.assign({},p);const sw=(a,b)=>{const t=q[a];q[a]=q[b];q[b]=t};
- ["ua","la","th","sh","f","k"].forEach(n=>sw(n+"L",n+"R"));
+ ["ua","la","th","sh","f","k","sua","sla"].forEach(n=>sw(n+"L",n+"R"));
  if(view==="front"){["uaL","laL","uaR","laR","thL","shL","thR","shR"].forEach(n=>{if(q[n]!=null)q[n]=-q[n]});
-  ["fL","fR","kL","kR"].forEach(n=>{if(q[n])q[n]=[-q[n][0],q[n][1]]});q.hx=-q.hx;q.face=-q.face;q.torso=360-q.torso;q.neck=360-q.neck;q.arch=-q.arch}
+  ["fL","fR","kL","kR"].forEach(n=>{if(q[n])q[n]=[-q[n][0],q[n][1]]});q.hx=-q.hx;q.px=-q.px;q.face=-q.face;q.torso=360-q.torso;q.neck=360-q.neck;q.arch=-q.arch}
  return q}
 function locate(m,t){let x=((t%m.C)+m.C)%m.C,i=0;while(i<m.beats.length-1&&x>m.beats[i]){x-=m.beats[i];i++}return{i,x}}
 function poseAt(m,t,mir){const{i,x}=locate(m,t);const n=m.K.length;const u=ease(Math.min(1,x/m.beats[i]));let p=lerpPose(m.K[i],m.K[(i+1)%n],u),nx=m.K[(i+1)%n];if(mir){p=mirror(p,m.view);nx=mirror(nx,m.view)}return{p,nx}}
@@ -557,7 +652,8 @@ function solve(p,view){const side=view==="side",S={};let hy=p.hy;
  const r=[td[1],-td[0]];const sb=add(S.nb,td,-3);
  S.shL=side?sb:add(sb,r,-LEN.shW);S.shR=side?sb:add(sb,r,LEN.shW);
  const nd=dir(p.neck);S.ne=add(S.nb,nd,LEN.neck);S.head=add(S.ne,nd,LEN.head);S.nd=nd;
- ["L","R"].forEach(s=>{S["el"+s]=add(S["sh"+s],dir(p["ua"+s]),LEN.ua);S["ha"+s]=add(S["el"+s],dir(p["la"+s]),LEN.la);
+ ["L","R"].forEach(s=>{/* s-prefixed scales foreshorten an arm segment that points toward the viewer */
+  S["el"+s]=add(S["sh"+s],dir(p["ua"+s]),LEN.ua*p["sua"+s]);S["ha"+s]=add(S["el"+s],dir(p["la"+s]),LEN.la*p["sla"+s]);
   const hj=[hjx(s),hy];S["hj"+s]=hj;let kn,an,fk=p["th"+s]!=null;
   if(fk){kn=add(hj,dir(p["th"+s]),LEN.th);an=add(kn,dir(p["sh"+s]),LEN.sh)}else{const o=ik(hj,p["f"+s],p["k"+s]);kn=o.k;an=o.an}
   S["kn"+s]=kn;S["an"+s]=an;const sa=angOf([an[0]-kn[0],an[1]-kn[1]]);let toe;
@@ -583,11 +679,20 @@ function drawScene(c,m,pose,opt={}){const{ctx,W,H}=fit(c);if(W<2)return;ctx.clea
    for(let k=0;k<steps;k++){const u0=k/steps,u1=(k+1)/steps;ctx.lineWidth=R*(.018+.03*Math.sin(Math.PI*Math.min(1,(u0+.02)))*Math.min(1,opt.ring*3));ctx.beginPath();ctx.arc(cx,ry,R,a0+(a1-a0)*u0,a0+(a1-a0)*u1+.002);ctx.stroke()}}}
  // ground
  ctx.lineCap="round";ctx.strokeStyle=COL.line;ctx.lineWidth=Math.max(1.5,2*s);ctx.beginPath();ctx.moveTo(cx-100*s,gy+5*s);ctx.lineTo(cx+100*s,gy+5*s);ctx.stroke();
+ if(m.prop)drawProp(ctx,m.prop,pose.px,T,s);
  const S=solve(pose,m.view);
  // dantian glow
  if(pose.glow>0&&!opt.thumb){const g=T(S.dan);const rr=(14+22*pose.glow)*s;const grd=ctx.createRadialGradient(g[0],g[1],0,g[0],g[1],rr);grd.addColorStop(0,hexA(COL.jade,.38*pose.glow));grd.addColorStop(1,hexA(COL.jade,0));ctx.fillStyle=grd;ctx.beginPath();ctx.arc(g[0],g[1],rr,0,Math.PI*2);ctx.fill()}
  if(opt.ghost){const G=solve(opt.ghost,m.view);skeleton(ctx,G,T,s,m.view,hexA(COL.jade,.32),hexA(COL.jade,.22),true)}
  skeleton(ctx,S,T,s,m.view,COL.ink,m.view==="side"?hexA(COL.ink,.4):COL.ink,false,pose)}
+/* park furniture the movement is done against: railing, door frame, pull-up bar, tree */
+function drawProp(ctx,pr,sign,T,s){const x=pr.x*sign,c=hexA(COL.muted,.55);ctx.lineCap="round";ctx.strokeStyle=c;ctx.lineWidth=Math.max(2,4*s);
+ const seg=(a,b)=>{const p=T(a),q=T(b);ctx.beginPath();ctx.moveTo(p[0],p[1]);ctx.lineTo(q[0],q[1]);ctx.stroke()};
+ if(pr.type==="rail"){const L=x-18*sign,R=x+40*sign;seg([L,pr.h],[R,pr.h]);seg([x+32*sign,0],[x+32*sign,pr.h]);seg([x-10*sign,0],[x-10*sign,pr.h]);ctx.lineWidth=Math.max(1,2*s);seg([L,pr.h*.5],[R,pr.h*.5])}
+ else if(pr.type==="door"){seg([x,0],[x,pr.h]);seg([x,pr.h],[x+24*sign,pr.h])}
+ else if(pr.type==="bar"){seg([-48,pr.h],[48,pr.h]);seg([-44,0],[-44,pr.h]);seg([44,0],[44,pr.h])}
+ else if(pr.type==="tree"){const a=T([x-8,0]),b=T([x+8,200]);ctx.fillStyle=hexA(COL.muted,.18);ctx.fillRect(a[0],b[1],b[0]-a[0],a[1]-b[1]);ctx.lineWidth=Math.max(1.5,2.5*s);
+  seg([x-8,0],[x-8,200]);seg([x+8,0],[x+8,200]);seg([x+4,150],[x+30,182]);seg([x-5,128],[x-28,160]);seg([x+18,166],[x+26,194])}}
 function hexA(col,a){col=col.trim();if(col.startsWith("#")){let h=col.slice(1);if(h.length===3)h=h.split("").map(x=>x+x).join("");const n=parseInt(h,16);return`rgba(${n>>16&255},${n>>8&255},${n&255},${a})`}
  const m=col.match(/[\d.]+/g);return m?`rgba(${m[0]},${m[1]},${m[2]},${a})`:col}
 function skeleton(ctx,S,T,s,view,ink,far,ghost,pose){const side=view==="side";ctx.lineCap="round";ctx.lineJoin="round";
@@ -671,7 +776,7 @@ function renderRoutines(){renderChips($("#durChips"),DUR,durF,v=>{durF=v;renderR
   b.onclick=()=>openRoutine(r);g.appendChild(b)})}
 
 /* ---------- compose ---------- */
-const FOCI=[["balanced","Balanced"],["wake","Wake up"],["spine","Spine"],["hips","Hips & legs"],["shoulders","Neck & shoulders"],["calm","Calm"]];
+const FOCI=[["balanced","Balanced"],["stretch","Deep stretch"],["park","Park morning"],["wake","Wake up"],["spine","Spine"],["hips","Hips & legs"],["shoulders","Neck & shoulders"],["calm","Calm"]];
 const POOLS={balanced:["heavens","bow","separate","horse","cloud","tiger","sway","bowstance","owl","squat","climb","crane","fists","pubu","seatfold"],
  wake:["heavens","bow","separate","owl","sway","climb","fists","bounce"],
  spine:["tiger","sidebend","climb","sway","owl","seatfold","cloud","separate"],
@@ -679,13 +784,17 @@ const POOLS={balanced:["heavens","bow","separate","horse","cloud","tiger","sway"
  shoulders:["heavens","separate","bow","owl","sidebend","cloud","fists","weituo"],
  calm:["cloud","weituo","post","butterfly","seatfold","tiger","owl"]};
 const WARM=["swing","neck","wings","waist","knees"];
+POOLS.stretch=["lilajin","yatui","dilunge","wolajin","ceyatui","seatfold","butterfly","baoxi","kneel","climb","pubu","hang"];
+POOLS.park=["zhuangbei","yatui","ceyatui","hang","heavens","squat","cloud","owl"];
+const LONG_HOLD=new Set(POOLS.stretch);
 let cFocus=store.get("cFocus","balanced"),cMin=store.get("cMin",12),composed=null;
-function compose(min,focus){const T=min*60;const n=Math.max(4,Math.round(T/68));const nw=Math.max(2,Math.min(4,Math.round(n*.25)));const close=min>=12?["post","dantian"]:["dantian"];
+function compose(min,focus){const T=min*60;const n=Math.max(4,Math.round(T/(focus==="stretch"?100:68)));const nw=Math.max(2,Math.min(4,Math.round(n*.25)));
+ const close=focus==="park"?["roufu","dantian"]:focus==="stretch"?(min>=12?["kneel","dantian"]:["dantian"]):min>=12?["post","dantian"]:["dantian"];
  const pool=POOLS[focus];const nm=Math.max(1,n-nw-close.length);const main=[];for(let i=0;i<nm;i++)main.push(pool[i%pool.length]);
- const warm=(focus==="calm"?["wings","neck","waist","swing"]:focus==="hips"?["swing","waist","knees","legswing"]:WARM).slice(0,nw);
+ const warm=(focus==="calm"?["wings","neck","waist","swing"]:focus==="hips"?["swing","waist","knees","legswing"]:focus==="park"?["paida","xilian","mingtiangu","swing"]:focus==="stretch"?["swing","waist","wings","knees"]:WARM).slice(0,nw);
  const ids=[...warm,...main,...close];const avail=T-PREP_FIRST-(ids.length-1)*settings.prep;
- const w=ids.map(id=>M[id].tags.includes("warm")?.75:(id==="post"||id==="dantian")?1.2:1);const sw=w.reduce((a,b)=>a+b,0);
- const items=ids.map((id,i)=>{let s=Math.round(avail*w[i]/sw/5)*5;s=Math.max(30,Math.min(180,s));return[id,s]});
+ const w=ids.map(id=>M[id].tags.includes("warm")?.75:LONG_HOLD.has(id)&&focus==="stretch"?1.5:(id==="post"||id==="dantian")?1.2:1);const sw=w.reduce((a,b)=>a+b,0);
+ const items=ids.map((id,i)=>{let s=Math.round(avail*w[i]/sw/5)*5;s=Math.max(30,Math.min(focus==="stretch"?240:180,s));return[id,s]});
  return{id:"custom",name:`${min}-minute ${FOCI.find(f=>f[0]===focus)[1].toLowerCase()} sequence`,hz:"自编",desc:"Composed for you.",items}}
 function renderCompose(){$("#cMin").value=cMin;$("#cMinOut").innerHTML=`${cMin}<span> min</span>`;
  renderChips($("#focusChips"),FOCI,cFocus,v=>{cFocus=v;store.set("cFocus",v);renderCompose()});
@@ -695,7 +804,7 @@ function renderCompose(){$("#cMin").value=cMin;$("#cMinOut").innerHTML=`${cMin}<
 
 /* ---------- library ---------- */
 let tagF="all";
-function renderLib(){const tl=[["all","All"],...["warm","brocade","stance","spine","hips","shoulders","breath","floor"].map(t=>[t,TAGS[t]])];
+function renderLib(){const tl=[["all","All"],...["stretch","selfcare","warm","brocade","stance","spine","hips","shoulders","breath","floor"].map(t=>[t,TAGS[t]])];
  renderChips($("#tagChips"),tl,tagF,v=>{tagF=v;renderLib()});const g=$("#lib");g.innerHTML="";
  MOVES.filter(m=>tagF==="all"||m.tags.includes(tagF)).forEach(m=>{const b=el("button",{class:"mcard",type:"button"},`<canvas aria-hidden="true"></canvas><span class="hzs">${esc(m.hz)}</span><b>${esc(m.name)}</b><small>${esc(m.py)}</small>`);
   const c=b.querySelector("canvas");const draw=staticPose(c,m,{pad:1});let raf=0;
@@ -720,11 +829,11 @@ function openMove(m){openSheet(`<div class="pfig"><canvas id="mvC" aria-label="$
  const c=$("#mvC");const t0=performance.now();const f=now=>{const t=(now-t0)/1000;const half=m.sides&&(Math.floor(t/(m.C*2))%2===1);const{p,nx}=poseAt(m,t,half);drawScene(c,m,p,{pad:.95,ghost:nx});if(!reduced)sheetAnim=requestAnimationFrame(f)};sheetAnim=requestAnimationFrame(f)}
 function breathSummary(m){const seen=[];m.breath.forEach((b,i)=>{const last=seen[seen.length-1];if(last&&last.b===b)last.s+=m.beats[i];else seen.push({b,s:m.beats[i]})});
  if(seen.length>1&&seen[0].b===seen[seen.length-1].b){seen[0].s+=seen.pop().s}
- if(seen.every(x=>x.b==="flow"))return"natural, unforced";return seen.map(x=>`${BL[x.b]} ${Math.round(x.s)}s`).join(" · ")}
-const BL={in:"Inhale",out:"Exhale",hold:"Hold",flow:"Breathe naturally"};
+ if(seen.every(x=>x.b==="flow"))return"natural, unforced";if(seen.every(x=>x.b==="soft"))return"slow and soft, into the stretch";return seen.map(x=>`${BL[x.b]} ${Math.round(x.s)}s`).join(" · ")}
+const BL={in:"Inhale",out:"Exhale",hold:"Hold",flow:"Breathe naturally",soft:"Breathe into the stretch"};
 function openRoutine(r){const secs=routineSecs(r);
  openSheet(`<div class="pbody">${XBTN}<div class="hero-hz">${esc(r.hz)}</div><h2 id="sheetTitle">${esc(r.name)}</h2><p class="muted">${esc(r.desc)}</p>
- <div class="meta"><span><b class="num">${fmtMin(secs)}</b> min</span><span><b class="num">${r.items.length}</b> movements</span><span>Focus: <b>${esc(r.focus||"")}</b></span></div>
+ <div class="meta"><span><b class="num">${fmtMin(secs)}</b> min</span><span><b class="num">${r.items.length}</b> movements</span><span>Focus: <b>${esc(r.focus||"")}</b></span></div>${r.saying!=null?sayingHTML(SAYINGS[r.saying]):""}
  <ol class="plan" id="rPlan"></ol><div><button class="btn" id="rGo"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Begin practice</button></div></div>`,true);
  $("#panel .x").onclick=closeSheet;const ol=$("#rPlan");
  r.items.forEach(([id,s])=>{const m=M[id];const li=el("li",{},`<canvas aria-hidden="true"></canvas><span class="nm">${esc(m.name)}<small>${esc(m.hz)} · ${esc(m.py)}${m.sides?" · both sides":""}</small></span><span class="s">${fmt(s)}</span>`);ol.appendChild(li);
@@ -765,7 +874,7 @@ const player={active:false,segs:[],si:0,t:0,running:false,raf:0,last:0,practised
   try{this.running?speechSynthesis.resume():speechSynthesis.pause()}catch(e){}if(!this.running)$("#plPhase").textContent="Paused";else{const g=this.seg();$("#plPhase").textContent=g.kind==="prep"?"Up next":g.m.sides&&this.t>=g.dur/2?"Side two":g.m.sides?"Side one":"Practise"}},
  finish(){this.running=false;bowl(1);setTimeout(()=>bowl(.6),2600);const mins=Math.max(1,Math.round(this.practised/60));record(this.practised,this.routine.name);this.recorded=true;
   say("Practice complete. Stand quietly for a moment, and carry this ease into your day.",true);
-  $("#doneMin").textContent=mins;$("#doneStreak").textContent=streak();$("#plDone").hidden=false;$("#doneBtn").focus()},
+  $("#doneMin").textContent=mins;$("#doneSaying").innerHTML=sayingHTML(SAYINGS[this.routine.saying??Math.floor(Math.random()*SAYINGS.length)]);$("#doneStreak").textContent=streak();$("#plDone").hidden=false;$("#doneBtn").focus()},
  close(){if(this.active&&!this.recorded)record(this.practised,this.routine.name);
   this.active=false;this.running=false;this.recorded=false;cancelAnimationFrame(this.raf);try{speechSynthesis.cancel()}catch(e){}try{this.wake&&this.wake.release()}catch(e){}this.wake=null;
   $("#player").hidden=true;document.body.style.overflow=""},
@@ -779,8 +888,8 @@ const player={active:false,segs:[],si:0,t:0,running:false,raf:0,last:0,practised
   const bars=$("#plBar").children;for(let i=0;i<bars.length;i++){const fi=bars[i].firstChild;const mv=this.segs[i*2+1];let f=0;if(i<g.idx)f=1;else if(i===g.idx&&g.kind==="move")f=this.t/g.dur;fi.style.width=(f*100)+"%"}
   const orb=$("#plOrb");
   if(!bi){$("#plBreath").textContent=g.kind==="prep"?"Settle":"";$("#plBreathN").textContent=g.kind==="prep"?"Starting in "+Math.ceil(g.dur-this.t):"";orb.style.transform="scale(.7)";return}
-  $("#plBreath").textContent=BL[bi.lab];$("#plBreathN").textContent=bi.lab==="flow"?"Steady and easy":Math.ceil(bi.rem)+"";
-  let sc=.78+.08*Math.sin(this.t*1.6);if(bi.lab==="in")sc=.55+.45*ease(bi.prog);else if(bi.lab==="out")sc=1-.45*ease(bi.prog);else if(bi.lab==="hold")sc=1;orb.style.transform=`scale(${sc.toFixed(3)})`}
+  $("#plBreath").textContent=BL[bi.lab];$("#plBreathN").textContent=bi.lab==="flow"?"Steady and easy":bi.lab==="soft"?"Long, slow breaths":Math.ceil(bi.rem)+"";
+  let sc=bi.lab==="soft"?.72+.18*Math.sin(this.t*.75):.78+.08*Math.sin(this.t*1.6);if(bi.lab==="in")sc=.55+.45*ease(bi.prog);else if(bi.lab==="out")sc=1-.45*ease(bi.prog);else if(bi.lab==="hold")sc=1;orb.style.transform=`scale(${sc.toFixed(3)})`}
 };
 function nextIntro(m,first){return`${first?"First":"Next"}: ${m.name}. ${m.setup}`}
 function planCues(g){const m=g.m,d=g.dur,out=[];out.push({t:.4,text:"Begin."+(m.sides?" First side.":""),int:false});
