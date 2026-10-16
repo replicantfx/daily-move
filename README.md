@@ -7,6 +7,21 @@ Guided 5–30 minute daily mobility practice drawn from the Shaolin warm-up, the
 - Guided player with timer ring, breath pacing, voice coach and bowl chime
 - Practice log and streak, stored in your browser
 
-Everything lives in a single `index.html` with no build step. Open it in a browser, or visit the GitHub Pages site and use **Add to Home Screen** on your phone.
+Live at **https://replicantfx.github.io/daily-move/**.
+
+## Install on your phone
+
+It's an installable web app: once added to the home screen it opens full-screen and works offline.
+
+- **iPhone / iPad (Safari):** Share → **Add to Home Screen**
+- **Android (Chrome):** tap **Install app** in the header, or ⋮ → **Install app**
+
+## How it's built
+
+No build step. The app itself is a single `index.html`; around it:
+
+- `manifest.webmanifest` and `icons/` make it installable
+- `sw.js` caches every file for offline use and refreshes the cache in the background, so a new version appears on the next launch after it's pushed. Bump `VERSION` in `sw.js` when you add or rename files.
+- `fonts/` holds self-hosted subsets containing only the characters the app uses. After adding text with new characters (new hanzi, pinyin), run `python tools/update-fonts.py`.
 
 Move within a range that feels easy. Stop if anything hurts, and check with a clinician if you are managing an injury or health condition.

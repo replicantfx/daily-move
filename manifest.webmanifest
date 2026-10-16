@@ -1,0 +1,18 @@
+{
+  "name": "Daily Move · 每日功",
+  "short_name": "Daily Move",
+  "description": "Guided 5–30 minute daily mobility practice from the Shaolin and qigong traditions.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#E7EBE5",
+  "theme_color": "#E7EBE5",
+  "categories": ["health", "fitness", "lifestyle"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
