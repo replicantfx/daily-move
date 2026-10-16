@@ -21,7 +21,7 @@ It's an installable web app: once added to the home screen it opens full-screen 
 No build step. The app itself is a single `index.html`; around it:
 
 - `manifest.webmanifest` and `icons/` make it installable
-- `sw.js` caches every file for offline use and refreshes the cache in the background, so a new version appears on the next launch after it's pushed. Bump `VERSION` in `sw.js` when you add or rename files.
+- `sw.js` caches every file for offline use. The page loads network-first, so a pushed update appears on the next open when online (the cached copy is used offline). Bump `VERSION` in `sw.js` when you add or rename files.
 - `fonts/` holds self-hosted subsets containing only the characters the app uses. After adding text with new characters (new hanzi, pinyin), run `python tools/update-fonts.py`.
 
 Move within a range that feels easy. Stop if anything hurts, and check with a clinician if you are managing an injury or health condition.

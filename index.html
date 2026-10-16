@@ -934,7 +934,11 @@ const SHARE_ICON=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
 inst.onclick=()=>{if(installEvt){installEvt.prompt();installEvt.userChoice.finally(()=>{installEvt=null;inst.hidden=true});return}
  openSheet(`<div class="pbody">${XBTN}<h2 id="sheetTitle">Install Daily Move</h2><p class="muted">Add it to your home screen and it opens full-screen and works without a connection.</p>
  <ol class="steps"><li>Open this page in <b>Safari</b>.</li><li>Tap the Share button ${SHARE_ICON} in the toolbar.</li><li>Scroll down and tap <b>Add to Home Screen</b>, then <b>Add</b>.</li></ol></div>`,true);$("#panel .x").onclick=closeSheet};
-if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){navigator.serviceWorker.register("sw.js").catch(()=>{})}
+if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){
+ /* When an update installs while the app is open, reload into it, but never mid-practice. */
+ const hadController=!!navigator.serviceWorker.controller;let reloaded=false;
+ navigator.serviceWorker.addEventListener("controllerchange",()=>{if(!hadController||reloaded)return;const go=()=>{if(player.active)return setTimeout(go,5000);reloaded=true;location.reload()};go()});
+ navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{})}
 
 readColors();player.syncToggles();renderLog();setupHero();renderRoutines();renderCompose();renderLib();
 window.__dm={MOVES,ROUTINES,solve,poseAt,drawScene,player};

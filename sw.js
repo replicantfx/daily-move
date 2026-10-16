@@ -1,8 +1,8 @@
 // Offline support for Daily Move.
-// Serves everything from the cache first so the app opens instantly and works offline,
-// then refreshes the cache in the background so the next launch picks up new versions.
+// The page is fetched network-first (cached copy when offline); fonts and icons come from
+// the cache first and refresh in the background.
 // Bump VERSION when the list of files below changes.
-const VERSION = "v2";
+const VERSION = "v3";
 const CACHE = `daily-move-${VERSION}`;
 const FILES = [
   "./",
@@ -41,23 +41,37 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET" || new URL(req.url).origin !== self.location.origin) return;
+  const navigate = req.mode === "navigate";
+  const key = navigate ? "./" : req;
 
   event.respondWith(
     caches.open(CACHE).then(async (cache) => {
-      const key = req.mode === "navigate" ? "./" : req;
       const cached = await cache.match(key, { ignoreSearch: true });
       // Fetch by URL: a navigate-mode Request can't be re-fetched with extra options.
-      const refresh = fetch(req.url, { cache: "no-cache" })
-        .then((res) => {
-          if (res.ok) cache.put(key, res.clone());
-          return res;
-        })
-        .catch(() => cached || Response.error());
+      const network = fetch(req.url, { cache: "no-cache" }).then((res) => {
+        if (res.ok) cache.put(key, res.clone());
+        return res;
+      });
+
+      // The page itself: network first, so a new version shows up on the next open.
+      // Fall back to the cached copy when offline or when the network is too slow.
+      if (navigate) {
+        const timeout = new Promise((resolve) => setTimeout(() => resolve(null), 3500));
+        const res = await Promise.race([network.catch(() => null), timeout]);
+        if (res && res.ok) return res;
+        if (cached) {
+          event.waitUntil(network.catch(() => {}));
+          return cached;
+        }
+        return network.catch(() => Response.error());
+      }
+
+      // Fonts and icons: cache first, refreshed in the background.
       if (cached) {
-        event.waitUntil(refresh);
+        event.waitUntil(network.catch(() => {}));
         return cached;
       }
-      return refresh;
+      return network.catch(() => Response.error());
     })
   );
 });
