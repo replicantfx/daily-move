@@ -83,7 +83,8 @@ h1,h2,h3{font-family:var(--f-display);font-weight:800;text-wrap:balance;margin:0
 .day{display:grid;gap:6px;justify-items:center}
 .dot{width:100%;max-width:34px;aspect-ratio:1;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-size:10px;color:var(--muted)}
 .dot.on{background:var(--saffron);border-color:var(--saffron);color:var(--on-accent);font-weight:700}
-.dot.today{border-color:var(--ink)}
+.dot.is-today{border-color:var(--ink);color:var(--ink);font-weight:700}
+.dot.on.is-today{color:var(--on-accent)}
 .day .mark{font-family:var(--f-display);color:var(--saffron);font-size:13px;line-height:1}
 .log-foot{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px;gap:8px;flex-wrap:wrap}
 
@@ -935,7 +936,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 function renderLog(){const h=history(),days=new Set(h.map(x=>x.d));const wk=$("#week");wk.innerHTML="";const now=new Date();const dow=(now.getDay()+6)%7;
  const mon=new Date(now);mon.setDate(now.getDate()-dow);let wsec=0;const names=["M","T","W","T","F","S","S"];
  for(let i=0;i<7;i++){const d=new Date(mon);d.setDate(mon.getDate()+i);const k=dkey(d);const on=days.has(k);h.forEach(x=>{if(x.d===k)wsec+=x.s});
-  const cell=el("div",{class:"day"},`<div class="dot${on?" on":""}${i===dow?" today":""}" aria-label="${d.toDateString()}${on?", practised":""}">${on?"✓":d.getDate()}</div><span>${names[i]}</span><span class="mark" title="${esc(THEMES[d.getDay()].name)}">${THEMES[d.getDay()].mark}</span>`);wk.appendChild(cell)}
+  const cell=el("div",{class:"day"},`<div class="dot${on?" on":""}${i===dow?" is-today":""}" aria-label="${d.toDateString()}${on?", practised":""}">${on?"✓":d.getDate()}</div><span>${names[i]}</span><span class="mark" title="${esc(THEMES[d.getDay()].name)}">${THEMES[d.getDay()].mark}</span>`);wk.appendChild(cell)}
  const st=streak();$("#streakN").textContent=st;$("#streakL").textContent=st===1?"day streak":"day streak";
  $("#weekMin").textContent=Math.round(wsec/60)+" min this week";$("#allMin").textContent=h.length?(h.length+(h.length===1?" session":" sessions")+" total"):"Your first session will appear here"}
 
