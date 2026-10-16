@@ -1,9 +1,10 @@
 # Daily Move · 每日功
 
-Guided 5–30 minute daily mobility practice drawn from the Shaolin warm-up, the Eight Brocades (Ba Duan Jin), stance training, Tai Chi and standing meditation.
+Guided 5–30 minute daily practice drawn from the Shaolin and qigong traditions: joint opening, the Eight Brocades (Ba Duan Jin), the Yi Jin Jing, the Five Animal Frolics, stances and kicks, lajin deep stretching, Chinese park self-care, the Six Healing Sounds, and Chan meditation.
 
-- 27 movements with animated figures, Chinese names, cues and breath patterns
-- 8 curated routines plus a sequence composer (5–30 min, by focus)
+- A new daily practice every day on a weekly rhythm (Sun breath & stillness, Mon Eight Brocades, Tue stances, Wed deep stretch, Thu Yi Jin Jing, Fri park routine, Sat Five Animals), in short, standard or long lengths, favouring movements you haven't done recently
+- 71 movements with animated figures, Chinese names, cues and breath patterns
+- 16 curated routines plus a sequence composer (5–30 min, by focus)
 - Guided player with timer ring, breath pacing, voice coach and bowl chime
 - Practice log and streak, stored in your browser
 
