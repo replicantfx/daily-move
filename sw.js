@@ -2,7 +2,7 @@
 // The page is fetched network-first (cached copy when offline); fonts and icons come from
 // the cache first and refresh in the background.
 // Bump VERSION when the list of files below changes.
-const VERSION = "v4";
+const VERSION = "v5";
 const CACHE = `daily-move-${VERSION}`;
 const FILES = [
   "./",

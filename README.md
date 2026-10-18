@@ -5,7 +5,9 @@ Guided 5–30 minute daily practice drawn from the Shaolin and qigong traditions
 - A new daily practice every day on a weekly rhythm (Sun breath & stillness, Mon Eight Brocades, Tue stances, Wed deep stretch, Thu Yi Jin Jing, Fri park routine, Sat Five Animals), in short, standard or long lengths, favouring movements you haven't done recently
 - 71 movements with animated figures, Chinese names, cues and breath patterns
 - 16 curated routines plus a sequence composer (5–30 min, by focus)
-- Guided player with timer ring, breath pacing, voice coach and bowl chime
+- Any routine can be scaled to the time you have: every movement's time shrinks or grows by the same factor
+- Guided player built around presence: an opening arrival with three breaths, spoken in/out breath coaching throughout, mindfulness prompts woven between the form cues, and a closing moment of reflection
+- Timer ring, breath pacing orb, voice coach and singing-bowl chime (plays even with the iPhone ringer switch off)
 - Practice log and streak, stored in your browser
 
 Live at **https://replicantfx.github.io/daily-move/**.
