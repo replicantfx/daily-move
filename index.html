@@ -188,7 +188,7 @@ input[type=range]{width:100%;accent-color:var(--saffron);height:28px}
 /* the whole screen breathes: a jade glow that swells on the in-breath and fades on the out-breath */
 .pl-glow{position:absolute;inset:-12%;z-index:0;pointer-events:none;background:radial-gradient(circle at var(--gx,30%) var(--gy,52%),var(--breath) 0,var(--breath-2) 42%,transparent 82%);opacity:.3;transform-origin:var(--gx,30%) var(--gy,52%);will-change:transform,opacity}
 .player>:not(.pl-glow):not(.pl-done){position:relative;z-index:1}
-.player{overflow:hidden}
+.player{overflow:hidden;overflow:clip} /* clip the glow without making the player scrollable */
 .pl-upnext{position:absolute;right:16px;bottom:16px;width:min(250px,72%);display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px 14px 8px 8px;max-width:min(270px,72%);transition:border-color .3s,transform .3s}
 .pl-stage .pl-upnext canvas{position:static;inset:auto;width:52px;height:52px;flex:none;background:var(--sunk);border-radius:10px}
 .pl-upnext div{min-width:0}
@@ -215,18 +215,35 @@ input[type=range]{width:100%;accent-color:var(--saffron);height:28px}
 @media (max-width:860px){
   .today{grid-template-columns:1fr}
   .compose{grid-template-columns:1fr}
-  .pl-glow{--gx:50%;--gy:26%}
-  .pl-main{grid-template-columns:1fr;grid-template-rows:minmax(270px,50vh) auto;overflow:auto}
-  .pl-stage canvas{bottom:62px;height:auto} /* the figure draws above the up-next strip */
-  .pl-upnext{left:16px;right:16px;bottom:6px;width:auto;padding:5px 12px 5px 5px}
-  .pl-stage .pl-upnext canvas{width:44px;height:44px}
-  .pl-upnext div{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
-  .pl-upnext small{display:inline}
-  .pl-info{padding:16px max(16px,env(safe-area-inset-right,0px)) 20px max(16px,env(safe-area-inset-left,0px));overflow:visible}
-  .pl-cue{min-height:7.5em}
+  /* phone player: one screen, no scrolling. The figure takes whatever height is left;
+     the text below sits in fixed-size rows so nothing moves as it changes. */
+  .pl-glow{--gx:50%;--gy:30%}
+  .pl-top{padding-top:8px;padding-bottom:6px;gap:8px}
+  .pl-top .icon-btn{width:38px;height:38px}
+  .pl-main{grid-template-columns:1fr;grid-template-rows:minmax(150px,1fr) auto;overflow:hidden}
+  .pl-phase{top:8px;font-size:11px;padding:4px 10px}
+  .pl-stage canvas{height:calc(100% - 50px)} /* the figure draws above the up-next strip */
+  .pl-upnext{left:16px;right:16px;bottom:4px;width:auto;max-width:none;padding:4px 12px 4px 4px;gap:8px}
+  .pl-stage .pl-upnext canvas{width:38px;height:38px;border-radius:8px}
+  .pl-upnext div{display:flex;align-items:baseline;gap:8px;min-width:0;flex:1}
+  .pl-upnext small{display:inline;flex:none}
+  .pl-upnext b{flex:1;min-width:0;font-size:14px}
+  .pl-upnext span{flex:none}
+  .pl-info{padding:6px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));gap:6px;overflow:hidden}
+  .pl-step{font-size:11px}
+  .pl-info h2{font-size:clamp(22px,6.4vw,30px);min-height:0;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pl-hz{font-size:14px;white-space:nowrap;overflow:hidden}
+  .pl-time{font-size:clamp(44px,13vw,60px)}
   .pl-row{gap:14px}
   .breath{gap:10px}
   .breath>div:last-child{min-width:5.2em}
+  .orb-wrap{width:52px;height:52px}
+  .orb{width:44px;height:44px}
+  .pl-cue{font-size:16px;line-height:1.45;height:4.35em;min-height:0;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+  .pl-cue::before{width:14px;margin-right:8px}
+  .pl-controls{margin-top:2px;padding-top:0;gap:18px;justify-content:center}
+  .ctl{width:48px;height:48px}
+  .ctl.main{width:64px;height:64px}
   .kbd{display:none}
 }
 @media (max-width:560px){
