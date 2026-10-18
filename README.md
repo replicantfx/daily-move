@@ -2,7 +2,7 @@
 
 Guided 5–30 minute daily practice drawn from the Shaolin and qigong traditions: joint opening, the Eight Brocades (Ba Duan Jin), the Yi Jin Jing, the Five Animal Frolics, stances and kicks, lajin deep stretching, Chinese park self-care, the Six Healing Sounds, and Chan meditation.
 
-- A new daily practice every day on a weekly rhythm (Sun breath & stillness, Mon Eight Brocades, Tue stances, Wed deep stretch, Thu Yi Jin Jing, Fri park routine, Sat Five Animals), in short, standard or long lengths, favouring movements you haven't done recently
+- A new daily practice every day on a weekly rhythm (Sun breath & stillness, Mon Eight Brocades, Tue stances, Wed deep stretch, Thu Yi Jin Jing, Fri park routine, Sat Five Animals), in short, standard or long lengths, favoring movements you haven't done recently
 - 71 movements with animated figures, Chinese names, cues and breath patterns
 - 16 curated routines plus a sequence composer (5–30 min, by focus)
 - Any routine can be scaled to the time you have: every movement's time shrinks or grows by the same factor

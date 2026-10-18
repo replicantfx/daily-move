@@ -17,7 +17,7 @@
    jade for breath, a small seal red only on the chop mark. Vertical hanzi run down card edges like scroll captions. */
 :root{
   --paper:#E7EBE5; --surface:#F4F6F1; --sunk:#DDE3DB; --ink:#18201C; --muted:#56625A; --line:#C6CFC5;
-  --saffron:#A35E0C; --saffron-soft:#EFDDC2; --on-accent:#FFF8EE; --jade:#2E7260; --jade-soft:rgba(46,114,96,.16); --breath:rgba(46,114,96,.32); --breath-2:rgba(46,114,96,.12);
+  --saffron:#A35E0C; --saffron-soft:#EFDDC2; --on-accent:#FFF8EE; --jade:#2E7260; --jade-soft:rgba(46,114,96,.16); --breath:rgba(46,114,96,.46); --breath-2:rgba(46,114,96,.2);
   --seal:#A8382B; --scrim:rgba(16,22,19,.48);
   --f-display:"Shippori Mincho B1","Songti SC","Noto Serif SC",Georgia,serif;
   --f-body:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans SC",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -25,12 +25,12 @@
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --paper:#0F1412; --surface:#171E1B; --sunk:#1E2723; --ink:#E3E8E0; --muted:#95A299; --line:#2B3631;
-  --saffron:#E4A04B; --saffron-soft:#3A2B16; --on-accent:#1A1206; --jade:#72B8A1; --jade-soft:rgba(114,184,161,.16); --breath:rgba(114,184,161,.34); --breath-2:rgba(114,184,161,.11);
+  --saffron:#E4A04B; --saffron-soft:#3A2B16; --on-accent:#1A1206; --jade:#72B8A1; --jade-soft:rgba(114,184,161,.16); --breath:rgba(114,184,161,.46); --breath-2:rgba(114,184,161,.17);
   --seal:#CF5F4E; --scrim:rgba(0,0,0,.6); color-scheme:dark;
 }}
 :root[data-theme="dark"]{
   --paper:#0F1412; --surface:#171E1B; --sunk:#1E2723; --ink:#E3E8E0; --muted:#95A299; --line:#2B3631;
-  --saffron:#E4A04B; --saffron-soft:#3A2B16; --on-accent:#1A1206; --jade:#72B8A1; --jade-soft:rgba(114,184,161,.16); --breath:rgba(114,184,161,.34); --breath-2:rgba(114,184,161,.11);
+  --saffron:#E4A04B; --saffron-soft:#3A2B16; --on-accent:#1A1206; --jade:#72B8A1; --jade-soft:rgba(114,184,161,.16); --breath:rgba(114,184,161,.46); --breath-2:rgba(114,184,161,.17);
   --seal:#CF5F4E; --scrim:rgba(0,0,0,.6); color-scheme:dark;
 }
 [hidden]{display:none!important}
@@ -184,7 +184,7 @@ input[type=range]{width:100%;accent-color:var(--saffron);height:28px}
 .pl-cue{font-size:18px;line-height:1.5;margin:0;max-width:44ch;min-height:3em}
 .pl-cue::before{content:"";display:inline-block;width:18px;height:2px;background:var(--saffron);vertical-align:middle;margin-right:10px}
 /* the whole screen breathes: a jade glow that swells on the in-breath and fades on the out-breath */
-.pl-glow{position:absolute;inset:-12%;z-index:0;pointer-events:none;background:radial-gradient(circle at var(--gx,30%) var(--gy,52%),var(--breath) 0,var(--breath-2) 34%,transparent 70%);opacity:.3;transform-origin:var(--gx,30%) var(--gy,52%);will-change:transform,opacity}
+.pl-glow{position:absolute;inset:-12%;z-index:0;pointer-events:none;background:radial-gradient(circle at var(--gx,30%) var(--gy,52%),var(--breath) 0,var(--breath-2) 42%,transparent 82%);opacity:.3;transform-origin:var(--gx,30%) var(--gy,52%);will-change:transform,opacity}
 .player>:not(.pl-glow):not(.pl-done){position:relative;z-index:1}
 .player{overflow:hidden}
 .pl-upnext{position:absolute;right:16px;bottom:16px;display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px 14px 8px 8px;max-width:min(270px,72%);transition:border-color .3s,transform .3s}
@@ -300,7 +300,7 @@ input[type=range]{width:100%;accent-color:var(--saffron);height:28px}
 
   <section class="sec" aria-labelledby="lTitle">
     <div class="sec-head">
-      <div><h2 id="lTitle">Movement library</h2><p>Open any form to watch it loop, read the cues, and practise it for a minute on its own.</p></div>
+      <div><h2 id="lTitle">Movement library</h2><p>Open any form to watch it loop, read the cues, and practice it for a minute on its own.</p></div>
       <div class="chips" id="tagChips" role="group" aria-label="Filter movements"></div>
     </div>
     <div class="lib" id="lib"></div>
@@ -360,7 +360,8 @@ input[type=range]{width:100%;accent-color:var(--saffron);height:28px}
 "use strict";
 /* ---------------- storage (per-viewer convenience) ---------------- */
 const store={get(k,d){try{const v=localStorage.getItem("dm."+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem("dm."+k,JSON.stringify(v))}catch(e){}}};
-const settings=Object.assign({voice:true,bell:true,breath:true,prep:6,lenFor:{}},store.get("settings",{}));
+const settings=Object.assign({voice:true,bell:true,breath:true,prep:10,lenFor:{}},store.get("settings",{}));
+settings.prep=Math.max(settings.prep,10); /* room for the slower voice to read each setup */
 const saveSettings=()=>store.set("settings",settings);
 
 /* ---------------- figure model ---------------- */
@@ -386,7 +387,7 @@ const MOVES=[
 {id:"neck",name:"Neck Release",hz:"颈部放松",py:"Jǐngbù Fàngsōng",view:"front",tags:["warm","shoulders"],
  base:HIPS_F,keys:[{},{neck:148},{},{neck:212}],beats:[3,3,3,3],breath:["out","in","out","in"],
  setup:"Hands on hips. Let the head tilt slowly toward one shoulder, then the other.",
- cues:["Ear toward shoulder. The shoulder stays down.","Move only as far as is easy. No bouncing.","Lengthen the crown of the head as you return to centre."],
+ cues:["Ear toward shoulder. The shoulder stays down.","Move only as far as is easy. No bouncing.","Lengthen the crown of the head as you return to center."],
  about:"Slow side tilts open the neck after sleep or screen time. The breath leads each tilt."},
 {id:"wings",name:"Opening the Wings",hz:"展翅",py:"Zhǎn Chì",view:"front",tags:["warm","shoulders","breath"],
  keys:[{hy:76},{uaL:-170,laL:-175,uaR:170,laR:175}],beats:[3,3],breath:["in","out"],
@@ -423,7 +424,7 @@ const MOVES=[
 {id:"owl",name:"Wise Owl Gazes Back",hz:"五劳七伤往后瞧",py:"Wǔ Láo Qī Shāng Wǎng Hòu Qiáo",view:"front",tags:["brocade","spine","shoulders"],
  base:{uaL:-22,laL:-30,uaR:22,laR:30},keys:[{},{face:-1},{},{face:1}],beats:[3,3,3,3],breath:["in","out","in","out"],
  setup:"Arms long by your sides, palms turned out. Slowly turn the head to look behind you.",
- cues:["Turn the head, not the shoulders. Chest stays facing forward.","Roll the palms outward as you turn.","Return to centre on the in-breath."],
+ cues:["Turn the head, not the shoulders. Chest stays facing forward.","Roll the palms outward as you turn.","Return to center on the in-breath."],
  about:"The fourth Brocade. A gentle rotation for the neck and upper back."},
 {id:"sway",name:"Swaying Head and Tail",hz:"摇头摆尾去心火",py:"Yáo Tóu Bǎi Wěi",view:"front",tags:["brocade","spine","hips"],
  base:Object.assign({uaL:-14,laL:-10,uaR:14,laR:10},HORSE),keys:[{},{torso:160,neck:150,hx:-8},{hy:52},{torso:200,neck:210,hx:8}],
@@ -442,7 +443,7 @@ const MOVES=[
  setup:"Horse stance, fists at the waist. Punch slowly to the side, eyes wide and focused.",
  cues:["Exhale as the fist extends. Twist the fist palm-down at the end.","Pull the fist back to the waist with the in-breath.","Eyes fierce, face relaxed."],
  about:"The seventh Brocade. Builds leg strength and focused intent, 气力."},
-{id:"bounce",name:"Bouncing on the Heels",hz:"背后七颠百病消",py:"Bèi Hòu Qī Diān",view:"side",tags:["brocade","legs","balance"],
+{id:"bounce",fixedPace:true,name:"Bouncing on the Heels",hz:"背后七颠百病消",py:"Bèi Hòu Qī Diān",view:"side",tags:["brocade","legs","balance"],
  keys:[{},{hy:87,fL:[-3,7],fR:[3,7]}],beats:[1.4,0.6],breath:["in","out"],
  setup:"Feet together. Rise onto the balls of the feet, then drop the heels gently to the ground.",
  cues:["Rise slowly, drop softly. Let the small jolt travel up the spine.","Keep the body tall and the shoulders loose.","Seven drops shake off a hundred ailments, the old saying goes."],
@@ -461,7 +462,7 @@ const MOVES=[
  base:{fL:[-50,0],fR:[50,0],uaL:-30,laL:80,uaR:30,laR:-80},keys:[{hx:-24,hy:30,torso:186},{hy:50},{hx:24,hy:30,torso:174},{hy:50}],
  beats:[3,2.5,3,2.5],breath:["out","in","out","in"],
  setup:"Wide stance. Sink into one bent leg while the other leg stays straight, then pass through the middle to the other side.",
- cues:["Go only as low as feels easy. Use your hands on the floor if you need them.","The straight leg keeps its foot flat and toes forward.","Glide through the centre. Do not bounce."],
+ cues:["Go only as low as feels easy. Use your hands on the floor if you need them.","The straight leg keeps its foot flat and toes forward.","Glide through the center. Do not bounce."],
  about:"A deep side lunge from Shaolin long fist. Excellent for inner thighs, hips and ankles."},
 {id:"crane",name:"Golden Rooster Stands",hz:"金鸡独立",py:"Jīn Jī Dú Lì",view:"side",tags:["stance","balance","legs"],sides:true,
  keys:[{},{fL:[0,0],fR:[22,46],uaR:150,laR:180,uaL:-10,laL:20},{fL:[0,0],fR:[23,47],uaR:150,laR:182,uaL:-10,laL:20}],
@@ -494,7 +495,7 @@ const MOVES=[
  base:{fL:[-16,0],fR:[16,0]},keys:[{},{hx:-6,torso:162,arch:5,neck:155,uaL:-200,laL:-205,uaR:12,laR:8},{},{hx:6,torso:198,arch:-5,neck:205,uaR:200,laR:205,uaL:-12,laL:-8}],
  beats:[3,3,3,3],breath:["out","in","out","in"],
  setup:"Feet apart. Reach one arm overhead and bend to the side, sliding the other hand down the leg.",
- cues:["Reach long before you bend. Both feet stay rooted.","Chest stays open, as if between two panes of glass.","Return through the centre on the inhale."],
+ cues:["Reach long before you bend. Both feet stay rooted.","Chest stays open, as if between two panes of glass.","Return through the center on the inhale."],
  about:"A lateral stretch that opens the ribs and the waist. A quick reset after sitting."},
 {id:"tiger",name:"Tiger Arches Its Back",hz:"虎弓背",py:"Hǔ Gōng Bèi",view:"side",tags:["spine","floor"],floor:true,
  base:{hx:-24,hy:40,torso:110,uaL:-2,laL:-2,uaR:0,laR:0,fL:[-62,3],fR:[-60,3],kL:[1,-.4],kR:[1,-.4]},
@@ -669,7 +670,7 @@ const MOVES=[
  beats:[3,3,3],breath:["out","hold","in"],
  setup:"Step one foot out and bend the knee. Swing both arms up and back over the head like antlers, turning the waist to look back at the rear heel.",
  cues:["Hands curled like antlers, index and little fingers extended.","Turn from the waist. The back leg stays straight.","Feel the long stretch down the side of the body."],
- about:"The deer of the Five Animal Frolics. A twisting side stretch that mobilises the waist and lower back."},
+ about:"The deer of the Five Animal Frolics. A twisting side stretch that mobilizes the waist and lower back."},
 {id:"wqbear",name:"Bear Swaying",hz:"熊晃",py:"Xióng Huàng",view:"front",tags:["animals","hips","legs"],
  base:{fL:[-22,0],fR:[22,0],hy:72},keys:[{hx:-9,torso:174,uaL:-6,laL:-2,uaR:18,laR:14},{hx:9,torso:186,uaL:-18,laL:-14,uaR:6,laR:2}],beats:[2,2],breath:["flow","flow"],
  setup:"Knees soft, arms loose. Shift the weight heavily from one leg to the other, letting the body rock and the arms swing like a bear.",
@@ -693,12 +694,12 @@ const MOVES=[
  setup:"Interlace the fingers in front of the chest and roll the wrists in circles. At the same time, rest one toe on the floor and circle that ankle.",
  cues:["Make slow, full circles with the wrists.","Change the ankle and the direction halfway through.","Small joints first: the Shaolin warm-up always begins here."],
  about:"The first step of the Shaolin joint-opening routine, 活动关节. Wakes up the wrists and ankles before anything else."},
-{id:"frontkick",name:"Front Kick Stretch",hz:"正踢腿",py:"Zhèng Tī Tuǐ",view:"side",tags:["stance","legs","hips"],sides:true,
+{id:"frontkick",fixedPace:true,name:"Front Kick Stretch",hz:"正踢腿",py:"Zhèng Tī Tuǐ",view:"side",tags:["stance","legs","hips"],sides:true,
  base:Object.assign({fL:[0,0],thR:2,shR:2},HIPS_S),keys:[{},{thR:150,shR:150}],beats:[2,1.6],breath:["in","out"],
  setup:"Stand tall, hands on the hips. Swing one straight leg up toward the forehead, toes pulled back, then lower it slowly.",
  cues:["Both knees straight. Height comes with time.","Lower the leg slowly. That is where the strength is built.","Stay upright. Don't lean back to meet the leg."],
  about:"The basic straight-leg kick of Shaolin training, done here as a dynamic hamstring stretch."},
-{id:"sidekick",name:"Side Kick Stretch",hz:"侧踢腿",py:"Cè Tī Tuǐ",view:"front",tags:["stance","legs","hips"],sides:true,
+{id:"sidekick",fixedPace:true,name:"Side Kick Stretch",hz:"侧踢腿",py:"Cè Tī Tuǐ",view:"front",tags:["stance","legs","hips"],sides:true,
  base:{fL:[-11,0],thR:4,shR:2,uaL:-90,laL:-90,uaR:90,laR:90},keys:[{},{thR:115,shR:118,torso:190,hx:-3}],beats:[2,1.6],breath:["in","out"],
  setup:"Arms out to the sides. Swing one straight leg up and out to the side, then lower it with control.",
  cues:["Toes point forward, not up at the sky.","Keep the standing leg straight and strong.","Smooth and controlled is better than high."],
@@ -744,9 +745,9 @@ const MOVES=[
 {id:"liuxi",sound:"shee",name:"Healing Sound Xi",hz:"嘻字诀",py:"Xī Zì Jué",view:"front",tags:["breath","sounds"],
  base:{fL:[-14,0],fR:[14,0],hy:78},keys:[{uaL:-12,laL:20,uaR:12,laR:-20},{uaL:-30,laL:140,uaR:30,laR:-140},{uaL:-160,laL:-170,uaR:160,laR:170},{uaL:-80,laL:-85,uaR:80,laR:85}],
  beats:[2,2,3,3],breath:["in","in","out","out"],
- setup:"Lift the hands up the centre of the body and overhead as you breathe in. Part them and float them down the sides on a long \"shee\".",
+ setup:"Lift the hands up the center of the body and overhead as you breathe in. Part them and float them down the sides on a long \"shee\".",
  cues:["Out-breath: a light, smiling \"shee\".","Let the arms descend like falling leaves.","The last sound of the set. Let everything settle."],
- about:"Traditionally linked to the Triple Burner, which harmonises the whole body. It closes the Six Healing Sounds."},
+ about:"Traditionally linked to the Triple Burner, which harmonizes the whole body. It closes the Six Healing Sounds."},
 {id:"reverse",name:"Reverse Belly Breathing",hz:"逆腹式呼吸",py:"Nì Fùshì Hūxī",view:"front",tags:["breath"],
  base:{fL:[-12,0],fR:[12,0],hy:79,uaL:-15,laL:60,uaR:25,laR:-110},keys:[{glow:.3},{glow:1}],beats:[4,6],breath:["in","out"],
  setup:"One hand on the lower belly, one on the chest. As you breathe in, gently draw the belly in. As you breathe out, let it soften and expand.",
@@ -771,9 +772,18 @@ const MOVES=[
  base:{uaL:-15,laL:60,uaR:15,laR:-60,hy:79,fL:[-12,0],fR:[12,0],glow:.35},keys:[{},{glow:1}],beats:[6,4],breath:["out","in"],
  setup:"Stand or sit comfortably. Rest the hands over the lower belly, just below the navel.",
  cues:["Breathe in through the nose and let the belly expand into the hands.","Breathe out slowly. Let the belly soften back.","Each breath a little slower than the last."],
- about:"Closing practice, 收功. The breath settles into the dantian, the body's centre of gravity."}
+ about:"Closing practice, 收功. The breath settles into the dantian, the body's center of gravity."}
 ];
 const M=Object.fromEntries(MOVES.map(m=>[m.id,m]));
+/* Breath pacing. Slow breathing near 6 breaths a minute, with the out-breath longer than the in-breath,
+   is the range most associated with calming the nervous system (resonance-frequency and extended-exhale
+   breathing), and matches the unhurried pace of qigong. Every in-breath lasts at least 4.5 s and every
+   out-breath at least 6.5 s; the movement within each breath slows to fit. Spans may wrap around the cycle. */
+const PACE={in:4.5,out:6.5,hold:2.5};
+MOVES.forEach(m=>{const n=m.beats.length,L=m.breath;if(m.fixedPace||L.every(x=>x===L[0]&&!PACE[x]))return;
+ let st=0;if(!L.every(x=>x===L[0]))while(L[st]===L[(st-1+n)%n])st++;
+ for(let k=0;k<n;){const lab=L[(st+k)%n],idx=[];let len=0;while(k<n&&L[(st+k)%n]===lab){const q=(st+k)%n;idx.push(q);len+=m.beats[q];k++}
+  if(PACE[lab]&&len<PACE[lab]){const f=PACE[lab]/len;idx.forEach(q=>m.beats[q]=+(m.beats[q]*f).toFixed(2))}}});
 MOVES.forEach(m=>{const B=m.view==="side"?SIDE:FRONT;const base=Object.assign({},B,m.base||{});m.K=m.keys.map(k=>Object.assign({},base,k));m.C=m.beats.reduce((a,b)=>a+b,0)});
 
 const TAGS={stretch:"Deep stretch",selfcare:"Self-care",meditation:"Meditation",sounds:"Healing sounds",yjj:"Yi Jin Jing",animals:"Five Animals",warm:"Warm-up",brocade:"Eight Brocades",stance:"Stances",spine:"Spine",hips:"Hips",shoulders:"Neck & shoulders",legs:"Legs",breath:"Breath",balance:"Balance",floor:"Floor"};
@@ -795,7 +805,7 @@ const ROUTINES=[
  items:[["swing",45],["lilajin",90],["yatui",120],["dilunge",120],["wolajin",120],["baoxi",60]]},
 {id:"lajin",name:"Lajin Deep Stretch",hz:"拉筋",focus:"Deep stretch",feat:"wolajin",saying:0,desc:"Slow, deep stretching held for minutes at a time. Lengthen the sinews from shoulders to ankles.",
  items:[["wings",45],["waist",45],["lilajin",120],["yatui",150],["ceyatui",150],["dilunge",150],["wolajin",180],["seatfold",90],["butterfly",90],["baoxi",60],["kneel",60],["dantian",60]]},
-{id:"sounds",name:"Six Healing Sounds",hz:"六字诀",focus:"Breath",feat:"liusi",saying:1,desc:"Six long out-breaths, each on its own sound and movement. Calming and quietly energising.",
+{id:"sounds",name:"Six Healing Sounds",hz:"六字诀",focus:"Breath",feat:"liusi",saying:1,desc:"Six long out-breaths, each on its own sound and movement. Calming and quietly energizing.",
  items:[["wings",45],["liuxu",60],["liuhe",60],["liuhu",60],["liusi",60],["liuchui",60],["liuxi",60],["dantian",60]]},
 {id:"chan",name:"Chan Stillness",hz:"禅定",focus:"Meditation",feat:"zuochan",desc:"Settle the breath, count it, then sit. Finish with slow walking meditation.",
  items:[["dantian",60],["shuxi",180],["zuochan",480],["xingchan",180]]},
@@ -819,7 +829,7 @@ const SAYINGS=[["筋长一寸，寿延十年","Jīn cháng yī cùn, shòu yán 
  ["饭后百步走，活到九十九","Fàn hòu bǎi bù zǒu, huó dào jiǔshíjiǔ","Walk a hundred steps after each meal and you will live to ninety-nine."],
  ["冬练三九，夏练三伏","Dōng liàn sān jiǔ, xià liàn sān fú","Train in the deepest cold of winter and the fiercest heat of summer."]];
 const sayingHTML=q=>`<figure class="saying"><blockquote>${esc(q[0])}</blockquote><figcaption>${esc(q[2])}<small>${esc(q[1])}</small></figcaption></figure>`;
-const PREP_FIRST=8,ARRIVE=16;
+const PREP_FIRST=12,ARRIVE=21;
 const overhead=r=>(r.items.length>1?ARRIVE:0)+PREP_FIRST+(r.items.length-1)*settings.prep;
 const routineSecs=r=>r.items.reduce((a,[,s])=>a+s,0)+overhead(r);
 /* fit a routine into a chosen number of minutes by scaling every movement's time by the same factor */
@@ -944,8 +954,9 @@ function pickVoice(){try{let vs=speechSynthesis.getVoices().filter(v=>/^en/i.tes
 try{VOICE=pickVoice();speechSynthesis.onvoiceschanged=()=>{VOICE=pickVoice()}}catch(e){}
 addEventListener("online",()=>{VOICE=pickVoice()});addEventListener("offline",()=>{VOICE=pickVoice()});
 /* opt.caption=false speaks without replacing the on-screen cue (used for breath words) */
-function say(text,interrupt,opt={}){const cue=$("#plCue");if(cue&&opt.caption!==false)cue.textContent=text;if(!settings.voice)return;
- try{if(interrupt)speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);if(VOICE)u.voice=VOICE;u.rate=opt.rate||.92;u.pitch=.96;u.volume=1;speechSynthesis.speak(u)}catch(e){}}
+/* unhurried: a slow rate, and each sentence spoken on its own so there is a natural pause between them */
+function say(text,interrupt,opt={}){const cue=$("#plCue");if(cue&&opt.caption!==false)cue.textContent=typeof opt.caption==="string"?opt.caption:text;if(!settings.voice)return;
+ try{if(interrupt)speechSynthesis.cancel();text.split(/(?<=[.!?])\s+/).forEach(part=>{const u=new SpeechSynthesisUtterance(part);if(VOICE)u.voice=VOICE;u.rate=opt.rate||.8;u.pitch=.95;u.volume=1;speechSynthesis.speak(u)})}catch(e){}}
 const speaking=()=>{try{return speechSynthesis.speaking||speechSynthesis.pending}catch(e){return false}};
 
 /* presence prompts, woven between the form cues so attention keeps returning to the body and the breath */
@@ -954,7 +965,7 @@ const PRESENCE={
  stretch:["Breathe into the place that is stretching.","With each out-breath, let the muscle release a little more.","Find the edge of the stretch, and rest there without pushing."],
  stance:["Feel the ground pushing back up through the legs.","Root down through the feet. Lengthen up through the crown.","Let the strength come from the legs while the upper body stays soft."],
  legs:["Feel the ground pushing back up through the legs."],
- balance:["Rest your gaze on one still point.","Small wobbles are fine. Keep returning to centre."],
+ balance:["Rest your gaze on one still point.","Small wobbles are fine. Keep returning to center."],
  breath:["Notice the cool air on the in-breath, and the warm air on the out-breath.","Let each breath be a little slower than the last.","Rest your attention at the belly, just below the navel."],
  meditation:["Let the breath be just as it is.","Notice sounds around you, then return to the breath.","Awareness is like the sky. Thoughts are clouds passing through."],
  selfcare:["Notice the warmth and tingling where your hands have been.","Care for the body the way you would care for someone you love."],
@@ -980,7 +991,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 function renderLog(){const h=history(),days=new Set(h.map(x=>x.d));const wk=$("#week");wk.innerHTML="";const now=new Date();const dow=(now.getDay()+6)%7;
  const mon=new Date(now);mon.setDate(now.getDate()-dow);let wsec=0;const names=["M","T","W","T","F","S","S"];
  for(let i=0;i<7;i++){const d=new Date(mon);d.setDate(mon.getDate()+i);const k=dkey(d);const on=days.has(k);h.forEach(x=>{if(x.d===k)wsec+=x.s});
-  const cell=el("div",{class:"day"},`<div class="dot${on?" on":""}${i===dow?" is-today":""}" aria-label="${d.toDateString()}${on?", practised":""}">${on?"✓":d.getDate()}</div><span>${names[i]}</span><span class="mark" title="${esc(THEMES[d.getDay()].name)}">${THEMES[d.getDay()].mark}</span>`);wk.appendChild(cell)}
+  const cell=el("div",{class:"day"},`<div class="dot${on?" on":""}${i===dow?" is-today":""}" aria-label="${d.toDateString()}${on?", practiced":""}">${on?"✓":d.getDate()}</div><span>${names[i]}</span><span class="mark" title="${esc(THEMES[d.getDay()].name)}">${THEMES[d.getDay()].mark}</span>`);wk.appendChild(cell)}
  const st=streak();$("#streakN").textContent=st;$("#streakL").textContent=st===1?"day streak":"day streak";
  $("#weekMin").textContent=Math.round(wsec/60)+" min this week";$("#allMin").textContent=h.length?(h.length+(h.length===1?" session":" sessions")+" total"):"Your first session will appear here"}
 
@@ -1095,7 +1106,7 @@ function openMove(m){openSheet(`<div class="pfig"><canvas id="mvC" aria-label="$
  <p>${esc(m.about)}</p><div><div class="eyebrow" style="margin-bottom:6px">How to</div><p>${esc(m.setup)}</p></div>
  <div><div class="eyebrow" style="margin-bottom:6px">Coaching cues</div><ul>${m.cues.map(c=>`<li>${esc(c)}</li>`).join("")}</ul></div>
  <div class="muted" style="font-size:13px">Breath: ${breathSummary(m)}</div>
- <div><button class="btn" id="mvGo"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Practise for 1 minute</button></div></div>`);
+ <div><button class="btn" id="mvGo"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Practice for 1 minute</button></div></div>`);
  $("#panel .x").onclick=closeSheet;$("#mvGo").onclick=()=>{closeSheet();player.start({id:"single",name:m.name,hz:m.hz,items:[[m.id,60]]})};
  const c=$("#mvC");const t0=performance.now();const f=now=>{const t=(now-t0)/1000;const half=m.sides&&(Math.floor(t/(m.C*2))%2===1);const{p,nx}=poseAt(m,t,half);drawScene(c,m,p,{pad:.95,ghost:nx});if(!reduced)sheetAnim=requestAnimationFrame(f)};sheetAnim=requestAnimationFrame(f)}
 function breathSummary(m){const seen=[];m.breath.forEach((b,i)=>{const last=seen[seen.length-1];if(last&&last.b===b)last.s+=m.beats[i];else seen.push({b,s:m.beats[i]})});
@@ -1121,9 +1132,9 @@ function openRoutine(base){const full=fmtMin(routineSecs(base)),keep=!["daily","
  $("#rGo").onclick=()=>{closeSheet();player.start(r)}}
 
 /* ---------- player ---------- */
-const player={active:false,segs:[],si:0,t:0,running:false,raf:0,last:0,practised:0,wake:null,routine:null,
+const player={active:false,segs:[],si:0,t:0,running:false,raf:0,last:0,practiced:0,wake:null,routine:null,
  start(r){ac();this.routine=r;this.segs=[];this.arrive=r.items.length>1;if(this.arrive)this.segs.push({kind:"arrive",m:M[r.items[0][0]],dur:ARRIVE,idx:-1});r.items.forEach(([id,s],i)=>{this.segs.push({kind:"prep",m:M[id],dur:i===0?PREP_FIRST:settings.prep,idx:i});this.segs.push({kind:"move",m:M[id],dur:s,idx:i})});
-  this.total=this.segs.reduce((a,s)=>a+s.dur,0);this.si=0;this.t=0;this.practised=0;this.recorded=false;this.idsDone=new Set();this.usedPres=new Set();this.active=true;this.running=true;
+  this.total=this.segs.reduce((a,s)=>a+s.dur,0);this.si=0;this.t=0;this.practiced=0;this.recorded=false;this.idsDone=new Set();this.usedPres=new Set();this.active=true;this.running=true;
   $("#player").hidden=false;$("#plDone").hidden=true;document.body.style.overflow="hidden";$("#plRoutine").textContent=r.name;
   const bar=$("#plBar");bar.innerHTML="";r.items.forEach(([,s])=>{const d=el("div");d.style.flex=String(s);d.appendChild(el("i"));bar.appendChild(d)});
   this.syncToggles();this.enter(true);this.lockWake();this.last=performance.now();cancelAnimationFrame(this.raf);this.raf=requestAnimationFrame(n=>this.frame(n));$("#plPlay").focus()},
@@ -1135,7 +1146,7 @@ const player={active:false,segs:[],si:0,t:0,running:false,raf:0,last:0,practised
    say("Welcome. Let's arrive. Stand or sit comfortably, let the shoulders drop, and let the breath slow down.",true);return}
   $("#plStep").textContent=g.kind==="prep"?`Up next · ${g.idx+1} of ${n}`:`Movement ${g.idx+1} of ${n}`;
   $("#plName").textContent=m.name;$("#plHz").textContent=m.hz;$("#plPy").textContent=m.py+(m.sides?" · both sides":"");
-  $("#plPhase").textContent=g.kind==="prep"?(first?"Get ready":"Up next"):m.sides?"Side one":"Practise";
+  $("#plPhase").textContent=g.kind==="prep"?(first?"Get ready":"Up next"):m.sides?"Side one":"Practice";
   const nextIdx=g.idx+1;const nw=$("#plNextWrap");
   this.nextM=g.kind==="move"&&nextIdx<n?M[this.routine.items[nextIdx][0]]:null;nw.classList.remove("soon");
   if(this.nextM){nw.hidden=false;$("#plNextLabel").textContent="Up next";$("#plNext").textContent=this.nextM.name;$("#plNextC").hidden=false;drawScene($("#plNextC"),this.nextM,this.nextM.K[0],{pad:1.1,thumb:true})}
@@ -1144,16 +1155,16 @@ const player={active:false,segs:[],si:0,t:0,running:false,raf:0,last:0,practised
   if(g.kind==="prep"){say(nextIntro(m,g.idx===0),!this.arrive||g.idx!==0)}
   else{bowl(.7);this.idsDone.add(m.id);this.cuePlan=planCues(g)}},
  frame(now){const dt=Math.min(.1,(now-this.last)/1000);this.last=now;
-  if(this.running&&this.active){const g=this.seg();const a=this.t;this.t+=dt;if(g.kind==="move")this.practised+=dt;this.events(g,a,this.t);if(this.t>=g.dur)this.next()}
+  if(this.running&&this.active){const g=this.seg();const a=this.t;this.t+=dt;if(g.kind==="move")this.practiced+=dt;this.events(g,a,this.t);if(this.t>=g.dur)this.next()}
   if(this.active){this.render();this.raf=requestAnimationFrame(n=>this.frame(n))}},
  events(g,a,b){const cross=x=>a<x&&b>=x;
-  if(g.kind==="arrive"){if(cross(5.5))say("Breathe in.",false,{caption:false,rate:.8});if(cross(9.5))say("And out.",false,{caption:false,rate:.8});
-   if(cross(13.5)){bowl(.45);say("Let's begin.",false)}return}
+  if(g.kind==="arrive"){if(cross(6))say("Breathe in.",false,{caption:false,rate:.72});if(cross(10.5))say("And slowly out.",false,{caption:false,rate:.72});
+   if(cross(18)){bowl(.45);say("Let's begin.",false)}return}
   if(g.kind==="move")this.breathCue(g,b);
   if(g.kind==="prep"){[3,2,1].forEach(k=>{if(cross(g.dur-k))tick(false)})}
   else{(this.cuePlan||[]).forEach(c=>{if(cross(c.t))say(c.text,c.int);});if(g.m.sides&&cross(g.dur/2)){bowl(.5);$("#plPhase").textContent="Side two"}if(g.m.bellEvery)for(let k=g.m.bellEvery;k<g.dur-8;k+=g.m.bellEvery)if(cross(k))bowl(.3)}},
  /* spoken breath coaching: every breath for the first three cycles of a movement (or side), then every other cycle */
- breathCue(g,t){if(!settings.breath||!settings.voice)return;const m=g.m,half=m.sides&&t>=g.dur/2,lt=half?t-g.dur/2:t;
+ breathCue(g,t){if(!settings.breath||!settings.voice||g.m.fixedPace)return;const m=g.m,half=m.sides&&t>=g.dur/2,lt=half?t-g.dur/2:t;
   const side=half?1:0;if(this.breathSide!==side){this.breathSide=side;this.breathN=0;this.prevLab=null}
   const bi=breathAt(m,lt);if(bi.lab===this.prevLab)return;this.prevLab=bi.lab;
   if(!["in","out","hold"].includes(bi.lab)||bi.rem<1.6||g.dur-t<3)return;const n=this.breathN,opening=n===0&&t<1;
@@ -1161,24 +1172,24 @@ const player={active:false,segs:[],si:0,t:0,running:false,raf:0,last:0,practised
   if(!opening&&speaking())return;if((this.cuePlan||[]).some(c=>Math.abs(c.t-t)<2.5))return;
   const first=n<2;let word=bi.lab==="in"?(first?"Breathe in":"In"):bi.lab==="out"?(m.sound?`Out, ${m.sound}`:first?"Breathe out":"Out"):"Hold, softly";
   if(opening)word=`Begin${m.sides?", first side":""}. ${word}`;this.breathN++;
-  say(word,false,{caption:opening?word+".":false,rate:.82})},
+  say(word,false,{caption:opening?word+".":false,rate:.72})},
  next(){if(this.si>=this.segs.length-1){this.finish();return}this.si++;this.t=0;this.enter(false)},
  skip(d){if(!$("#plDone").hidden)return;const g=this.seg();let idx=g.idx;
   if(d>0){idx++;if(idx>=this.routine.items.length){this.finish();return}}
   else if(!(g.kind==="move"&&this.t>3))idx=Math.max(0,idx-1);
   this.si=idx*2+(this.arrive?1:0);this.t=0;this.enter(idx===0)},
  toggle(){this.running=!this.running;$("#plPlayIcon").innerHTML=this.running?'<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';$("#plPlay").setAttribute("aria-label",this.running?"Pause":"Resume");
-  try{this.running?speechSynthesis.resume():speechSynthesis.pause()}catch(e){}if(!this.running)$("#plPhase").textContent="Paused";else{const g=this.seg();$("#plPhase").textContent=g.kind==="prep"?"Up next":g.m.sides&&this.t>=g.dur/2?"Side two":g.m.sides?"Side one":"Practise"}},
- finish(){this.running=false;bowl(1);setTimeout(()=>bowl(.6),2600);const mins=Math.max(1,Math.round(this.practised/60));record(this.practised,this.routine.name,[...this.idsDone]);this.recorded=true;
+  try{this.running?speechSynthesis.resume():speechSynthesis.pause()}catch(e){}if(!this.running)$("#plPhase").textContent="Paused";else{const g=this.seg();$("#plPhase").textContent=g.kind==="prep"?"Up next":g.m.sides&&this.t>=g.dur/2?"Side two":g.m.sides?"Side one":"Practice"}},
+ finish(){this.running=false;bowl(1);setTimeout(()=>bowl(.6),2600);const mins=Math.max(1,Math.round(this.practiced/60));record(this.practiced,this.routine.name,[...this.idsDone]);this.recorded=true;
   say("Practice complete. Stay here for one more breath. Notice how your body feels now, and how your mind feels, compared to when you began. Carry this into your day.",true);
   $("#doneMin").textContent=mins;$("#doneSaying").innerHTML=sayingHTML(SAYINGS[this.routine.saying??Math.floor(Math.random()*SAYINGS.length)]);$("#doneStreak").textContent=streak();$("#plDone").hidden=false;$("#doneBtn").focus()},
- close(){if(this.active&&!this.recorded)record(this.practised,this.routine.name,[...this.idsDone]);
+ close(){if(this.active&&!this.recorded)record(this.practiced,this.routine.name,[...this.idsDone]);
   this.active=false;this.running=false;this.recorded=false;cancelAnimationFrame(this.raf);try{speechSynthesis.cancel()}catch(e){}try{this.wake&&this.wake.release()}catch(e){}this.wake=null;
   $("#player").hidden=true;document.body.style.overflow=""},
  syncToggles(){$("#plBreathBtn").setAttribute("aria-pressed",String(settings.breath));$("#tBreath").setAttribute("aria-pressed",String(settings.breath));$("#plVoice").setAttribute("aria-pressed",String(settings.voice));$("#plBell").setAttribute("aria-pressed",String(settings.bell));$("#tVoice").setAttribute("aria-pressed",String(settings.voice));$("#tBell").setAttribute("aria-pressed",String(settings.bell))},
  render(){const g=this.seg();if(!g)return;const m=g.m;const c=$("#plCanvas");let pose,ghost,bi;
   if(g.kind==="prep"||g.kind==="arrive"){pose=m.K[0];ghost=null;bi=null}
-  if(g.kind==="arrive"&&this.t>=5.5&&this.t<13.5){const x=this.t-5.5;bi={lab:x<4?"in":"out",rem:4-(x%4),prog:(x%4)/4}}
+  if(g.kind==="arrive"&&this.t>=6&&this.t<17){const x=this.t-6,inh=x<4.5;bi={lab:inh?"in":"out",rem:inh?4.5-x:11-x,prog:inh?x/4.5:(x-4.5)/6.5}}
   else{const half=m.sides&&this.t>=g.dur/2;const lt=half?this.t-g.dur/2:this.t;const r=poseAt(m,lt,half);pose=r.p;ghost=r.nx;bi=breathAt(m,lt);if(m.count)bi.count=Math.floor(lt/m.C)%m.count+1}
   drawScene(c,m,pose,{pad:.78,ghost,ring:g.kind==="move"?Math.min(1,this.t/g.dur):0});
   $("#plTime").textContent=fmt(g.dur-this.t);
@@ -1190,7 +1201,7 @@ const player={active:false,segs:[],si:0,t:0,running:false,raf:0,last:0,practised
   if(!bi){this.glow(.62);$("#plBreath").textContent=g.kind==="move"?"":"Settle";$("#plBreathN").textContent=g.kind==="move"?"":"Starting in "+Math.ceil(g.dur-this.t);orb.style.transform="scale(.7)";return}
   $("#plBreath").textContent=BL[bi.lab];$("#plBreathN").textContent=g.kind==="arrive"?Math.ceil(bi.rem)+"":bi.count?`Count ${bi.count} of ${m.count}`:bi.lab==="flow"?"Steady and easy":bi.lab==="soft"?"Long, slow breaths":bi.lab==="still"?"Nothing to do but sit":Math.ceil(bi.rem)+"";
   let sc=bi.lab==="soft"||bi.lab==="still"?.72+.18*Math.sin(this.t*.75):.78+.08*Math.sin(this.t*1.6);if(bi.lab==="in")sc=.55+.45*ease(bi.prog);else if(bi.lab==="out")sc=1-.45*ease(bi.prog);else if(bi.lab==="hold")sc=1;orb.style.transform=`scale(${sc.toFixed(3)})`;this.glow(sc)},
- glow(sc){const k=Math.max(0,Math.min(1,(sc-.55)/.45)),el=$("#plGlow");el.style.opacity=(.12+.88*k).toFixed(3);if(!reduced)el.style.transform=`scale(${(.8+.34*k).toFixed(3)})`}
+ glow(sc){const k=Math.max(0,Math.min(1,(sc-.55)/.45)),el=$("#plGlow");el.style.opacity=(.08+.92*k).toFixed(3);if(!reduced)el.style.transform=`scale(${(.72+.5*k).toFixed(3)})`}
 };
 function nextIntro(m,first){return`${first?"First":"Next"}: ${m.name}. ${m.setup}`}
 function planCues(g){const m=g.m,d=g.dur,out=[];const lines=[];m.cues.forEach(c=>{lines.push(c);lines.push(presenceFor(m,player.usedPres))});
@@ -1198,7 +1209,7 @@ function planCues(g){const m=g.m,d=g.dur,out=[];const lines=[];m.cues.forEach(c=
  const coached=settings.breath&&settings.voice&&m.breath.some(b=>b==="in"||b==="out");if(!coached)out.push({t:.4,text:"Begin."+(m.sides?" First side.":""),int:false});
  const t0=coached?Math.min(Math.max(6,m.C+1),14):6;
  const marks=[];if(m.sides)marks.push(d/2);if(d>=35)marks.push(d-10);
- const iv=m.cueGap||Math.max(11,Math.min(24,d/(m.cues.length+1)));let k=0;
+ const iv=m.cueGap||Math.max(15,Math.min(28,d/(m.cues.length+1)));let k=0;
  const med=m.tags.includes("meditation");for(let t=t0;t<d-6&&k<lines.length*(med?1:2);t+=iv){if(marks.some(x=>Math.abs(x-t)<6))continue;out.push({t,text:lines[k%lines.length]});k++}
  if(m.sides)out.push({t:d/2,text:"Switch sides. Take a breath as you change.",int:true});
  const nx=player.routine.items[g.idx+1],nxName=nx&&M[nx[0]].name;
