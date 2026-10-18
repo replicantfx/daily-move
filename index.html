@@ -171,28 +171,30 @@ input[type=range]{width:100%;accent-color:var(--saffron);height:28px}
 .pl-phase{position:absolute;left:50%;top:18px;transform:translateX(-50%);font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--saffron);background:var(--saffron-soft);padding:5px 12px;border-radius:999px;white-space:nowrap}
 .pl-info{padding:28px max(16px,env(safe-area-inset-right,0px)) 24px 28px;display:flex;flex-direction:column;gap:14px;min-width:0;overflow:auto}
 .pl-step{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
-.pl-info h2{font-size:clamp(28px,3.6vw,44px)}
+.pl-info h2{font-size:clamp(28px,3.6vw,44px);min-height:2.3em;display:flex;align-items:flex-end} /* room for two lines, so a short name doesn't pull everything up */
 .pl-hz{font-family:var(--f-display);color:var(--saffron);font-size:16px;display:flex;gap:12px;flex-wrap:wrap;align-items:baseline}
 .pl-hz small{font-family:var(--f-body);color:var(--muted);font-size:13px;letter-spacing:.02em}
-.pl-row{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
-.pl-time{font-family:var(--f-display);font-size:clamp(56px,8vw,88px);font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.pl-row{display:flex;align-items:center;gap:22px}
+.pl-time{font-family:var(--f-display);font-size:clamp(56px,8vw,88px);font-weight:800;line-height:1;font-variant-numeric:tabular-nums;font-feature-settings:"tnum";width:3.15em;flex:none;white-space:nowrap}
 .breath{display:flex;align-items:center;gap:12px}
-.orb-wrap{width:56px;height:56px;display:grid;place-items:center;border-radius:50%;border:1px dashed var(--jade)}
-.orb{width:56px;height:56px;border-radius:50%;background:var(--jade-soft);border:2px solid var(--jade);transform:scale(.6)}
+.breath{min-width:0;flex:1}
+.breath>div:last-child{min-width:6.5em}
+.orb-wrap{width:60px;height:60px;flex:none;display:grid;place-items:center;border-radius:50%;border:1px dashed var(--jade)}
+.orb{width:52px;height:52px;border-radius:50%;background:var(--jade-soft);border:2px solid var(--jade);transform:scale(.6);transform-origin:50% 50%}
 .breath b{display:block;color:var(--jade);font-size:17px}
-.breath span{font-size:13px;color:var(--muted)}
-.pl-cue{font-size:18px;line-height:1.5;margin:0;max-width:44ch;min-height:3em}
+.breath span{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pl-cue{font-size:18px;line-height:1.5;margin:0;max-width:44ch;min-height:6em}
 .pl-cue::before{content:"";display:inline-block;width:18px;height:2px;background:var(--saffron);vertical-align:middle;margin-right:10px}
 /* the whole screen breathes: a jade glow that swells on the in-breath and fades on the out-breath */
 .pl-glow{position:absolute;inset:-12%;z-index:0;pointer-events:none;background:radial-gradient(circle at var(--gx,30%) var(--gy,52%),var(--breath) 0,var(--breath-2) 42%,transparent 82%);opacity:.3;transform-origin:var(--gx,30%) var(--gy,52%);will-change:transform,opacity}
 .player>:not(.pl-glow):not(.pl-done){position:relative;z-index:1}
 .player{overflow:hidden}
-.pl-upnext{position:absolute;right:16px;bottom:16px;display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px 14px 8px 8px;max-width:min(270px,72%);transition:border-color .3s,transform .3s}
+.pl-upnext{position:absolute;right:16px;bottom:16px;width:min(250px,72%);display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px 14px 8px 8px;max-width:min(270px,72%);transition:border-color .3s,transform .3s}
 .pl-stage .pl-upnext canvas{position:static;inset:auto;width:52px;height:52px;flex:none;background:var(--sunk);border-radius:10px}
 .pl-upnext div{min-width:0}
 .pl-upnext small{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
-.pl-upnext b{display:block;font-size:15px;line-height:1.25}
-.pl-upnext span{font-size:13px;color:var(--muted)}
+.pl-upnext b{display:block;font-size:15px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-upnext span{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
 .pl-upnext.soon{border-color:var(--saffron);transform:translateY(-4px)}
 .pl-upnext.soon small,.pl-upnext.soon span{color:var(--saffron)}
 .pl-controls{display:flex;gap:16px;align-items:center;margin-top:auto;padding-top:6px}
@@ -214,9 +216,17 @@ input[type=range]{width:100%;accent-color:var(--saffron);height:28px}
   .today{grid-template-columns:1fr}
   .compose{grid-template-columns:1fr}
   .pl-glow{--gx:50%;--gy:26%}
-  .pl-main{grid-template-columns:1fr;grid-template-rows:minmax(220px,44vh) auto;overflow:auto}
+  .pl-main{grid-template-columns:1fr;grid-template-rows:minmax(270px,50vh) auto;overflow:auto}
+  .pl-stage canvas{bottom:62px;height:auto} /* the figure draws above the up-next strip */
+  .pl-upnext{left:16px;right:16px;bottom:6px;width:auto;padding:5px 12px 5px 5px}
+  .pl-stage .pl-upnext canvas{width:44px;height:44px}
+  .pl-upnext div{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .pl-upnext small{display:inline}
   .pl-info{padding:16px max(16px,env(safe-area-inset-right,0px)) 20px max(16px,env(safe-area-inset-left,0px));overflow:visible}
-  .pl-cue{min-height:0}
+  .pl-cue{min-height:7.5em}
+  .pl-row{gap:14px}
+  .breath{gap:10px}
+  .breath>div:last-child{min-width:5.2em}
   .kbd{display:none}
 }
 @media (max-width:560px){
@@ -361,7 +371,6 @@ input[type=range]{width:100%;accent-color:var(--saffron);height:28px}
 /* ---------------- storage (per-viewer convenience) ---------------- */
 const store={get(k,d){try{const v=localStorage.getItem("dm."+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem("dm."+k,JSON.stringify(v))}catch(e){}}};
 const settings=Object.assign({voice:true,bell:true,breath:true,prep:10,lenFor:{}},store.get("settings",{}));
-settings.prep=Math.max(settings.prep,10); /* room for the slower voice to read each setup */
 const saveSettings=()=>store.set("settings",settings);
 
 /* ---------------- figure model ---------------- */
@@ -756,7 +765,7 @@ const MOVES=[
 {id:"shuxi",name:"Counting Breaths",hz:"数息",py:"Shǔ Xī",view:"front",tags:["breath","meditation","floor"],floor:true,count:10,cueGap:45,
  base:SEATED,keys:[{},{glow:.8}],beats:[4,6],breath:["in","out"],
  setup:"Sit cross-legged or on a chair, hands resting in the lap. Count each out-breath from one to ten, then begin again at one.",
- cues:["Count on the out-breath. One. Then two.","If you lose count, simply start again at one. That is the practice.","Let the breath find its own pace."],
+ cues:["Count on the out-breath. One. Then two.","If you lose count, simply start again at one. That is the practice.","Keep the breath smooth and steady with the glow."],
  about:"Breath counting, the first meditation taught to beginners in Chan monasteries. It gives the mind one simple job."},
 {id:"zuochan",name:"Seated Chan Meditation",hz:"坐禅",py:"Zuò Chán",view:"front",tags:["breath","meditation","floor"],floor:true,cueGap:90,bellEvery:120,
  base:SEATED,keys:[{glow:.35},{glow:.6}],beats:[5,5],breath:["still","still"],
@@ -771,19 +780,10 @@ const MOVES=[
 {id:"dantian",name:"Dantian Breathing",hz:"丹田呼吸",py:"Dāntián Hūxī",view:"front",tags:["breath"],
  base:{uaL:-15,laL:60,uaR:15,laR:-60,hy:79,fL:[-12,0],fR:[12,0],glow:.35},keys:[{},{glow:1}],beats:[6,4],breath:["out","in"],
  setup:"Stand or sit comfortably. Rest the hands over the lower belly, just below the navel.",
- cues:["Breathe in through the nose and let the belly expand into the hands.","Breathe out slowly. Let the belly soften back.","Each breath a little slower than the last."],
+ cues:["Breathe in through the nose and let the belly expand into the hands.","Breathe out slowly. Let the belly soften back.","Each breath smooth and even, like silk being drawn."],
  about:"Closing practice, 收功. The breath settles into the dantian, the body's center of gravity."}
 ];
 const M=Object.fromEntries(MOVES.map(m=>[m.id,m]));
-/* Breath pacing. Slow breathing near 6 breaths a minute, with the out-breath longer than the in-breath,
-   is the range most associated with calming the nervous system (resonance-frequency and extended-exhale
-   breathing), and matches the unhurried pace of qigong. Every in-breath lasts at least 4.5 s and every
-   out-breath at least 6.5 s; the movement within each breath slows to fit. Spans may wrap around the cycle. */
-const PACE={in:4.5,out:6.5,hold:2.5};
-MOVES.forEach(m=>{const n=m.beats.length,L=m.breath;if(m.fixedPace||L.every(x=>x===L[0]&&!PACE[x]))return;
- let st=0;if(!L.every(x=>x===L[0]))while(L[st]===L[(st-1+n)%n])st++;
- for(let k=0;k<n;){const lab=L[(st+k)%n],idx=[];let len=0;while(k<n&&L[(st+k)%n]===lab){const q=(st+k)%n;idx.push(q);len+=m.beats[q];k++}
-  if(PACE[lab]&&len<PACE[lab]){const f=PACE[lab]/len;idx.forEach(q=>m.beats[q]=+(m.beats[q]*f).toFixed(2))}}});
 MOVES.forEach(m=>{const B=m.view==="side"?SIDE:FRONT;const base=Object.assign({},B,m.base||{});m.K=m.keys.map(k=>Object.assign({},base,k));m.C=m.beats.reduce((a,b)=>a+b,0)});
 
 const TAGS={stretch:"Deep stretch",selfcare:"Self-care",meditation:"Meditation",sounds:"Healing sounds",yjj:"Yi Jin Jing",animals:"Five Animals",warm:"Warm-up",brocade:"Eight Brocades",stance:"Stances",spine:"Spine",hips:"Hips",shoulders:"Neck & shoulders",legs:"Legs",breath:"Breath",balance:"Balance",floor:"Floor"};
@@ -829,9 +829,9 @@ const SAYINGS=[["筋长一寸，寿延十年","Jīn cháng yī cùn, shòu yán 
  ["饭后百步走，活到九十九","Fàn hòu bǎi bù zǒu, huó dào jiǔshíjiǔ","Walk a hundred steps after each meal and you will live to ninety-nine."],
  ["冬练三九，夏练三伏","Dōng liàn sān jiǔ, xià liàn sān fú","Train in the deepest cold of winter and the fiercest heat of summer."]];
 const sayingHTML=q=>`<figure class="saying"><blockquote>${esc(q[0])}</blockquote><figcaption>${esc(q[2])}<small>${esc(q[1])}</small></figcaption></figure>`;
-const PREP_FIRST=12,ARRIVE=21;
-const overhead=r=>(r.items.length>1?ARRIVE:0)+PREP_FIRST+(r.items.length-1)*settings.prep;
-const routineSecs=r=>r.items.reduce((a,[,s])=>a+s,0)+overhead(r);
+const PREP=11,PREP_FIRST=11,ARRIVE=33; /* one breath between movements, three to arrive */
+const overhead=r=>(r.items.length>1?ARRIVE:0)+PREP_FIRST+(r.items.length-1)*PREP;
+const routineSecs=r=>r.items.reduce((a,[id,s])=>a+quant(id,s),0)+overhead(r);
 /* fit a routine into a chosen number of minutes by scaling every movement's time by the same factor */
 function scaleRoutine(r,min){const moveT=r.items.reduce((a,[,s])=>a+s,0),f=Math.max(.15,(min*60-overhead(r))/moveT);
  return Object.assign({},r,{items:r.items.map(([id,s])=>[id,Math.max(M[id].sides?30:20,Math.round(s*f/5)*5)])})}
@@ -848,6 +848,33 @@ function mirror(p,view){const q=Object.assign({},p);const sw=(a,b)=>{const t=q[a
  return q}
 function locate(m,t){let x=((t%m.C)+m.C)%m.C,i=0;while(i<m.beats.length-1&&x>m.beats[i]){x-=m.beats[i];i++}return{i,x}}
 function poseAt(m,t,mir){const{i,x}=locate(m,t);const n=m.K.length;const u=ease(Math.min(1,x/m.beats[i]));let p=lerpPose(m.K[i],m.K[(i+1)%n],u),nx=m.K[(i+1)%n];if(mir){p=mirror(p,m.view);nx=mirror(nx,m.view)}return{p,nx}}
+/* ---------- one breath for the whole session ----------
+   Slow breathing near 5.5 breaths a minute with a longer out-breath is the range most associated with calming the
+   nervous system (resonance-frequency and extended-exhale breathing) and matches the unhurried pace of qigong.
+   Every part of a session (arrival, transitions, each movement and each side) lasts a whole number of breaths and
+   starts on an in-breath, so the rhythm never breaks; every movement is animated from this clock. */
+const BIN=4.5,BOUT=6.5,BREATH=BIN+BOUT;
+function breathPhase(t){const r=((t%BREATH)+BREATH)%BREATH,inh=r<BIN;return{lab:inh?"in":"out",prog:inh?r/BIN:(r-BIN)/BOUT,rem:inh?BIN-r:BREATH-r,n:Math.floor(t/BREATH)}}
+/* map each movement's keyframes onto in- and out-breaths. Holds and long stretches breathe through one full breath. */
+function buildTimeline(m){const n=m.beats.length,L=m.breath;
+ if(m.fixedPace||L.every(x=>x==="flow")){const N=Math.max(1,Math.round(BREATH/m.C));m.tl={kind:"tempo",rate:m.C*N/BREATH,per:N};return}
+ const lab=L.every(x=>x==="soft"||x==="still")?L.map((x,i)=>i%2?"out":"in"):L;
+ const groups=[];for(let i=0;i<n;){const l=lab[i],tr=[];while(i<n&&lab[i]===l){tr.push(i);i++}groups.push({l,tr,w:tr.map(q=>m.beats[q])})}
+ let next=null;const G=groups.map(g=>{const breathy=g.l==="in"||g.l==="out";let ty=breathy?(next&&g.l!==next?next:g.l):(next||"in");const types=[];
+  for(let k=0;k<(breathy?1:2);k++){types.push(ty);ty=ty==="in"?"out":"in"}next=ty;return{types,tr:g.tr,w:g.w}});
+ if(G.reduce((a,g)=>a+g.types.length,0)%2)G[G.length-1].types.push(next); /* whole breaths per cycle */
+ m.tl={kind:"breath",G,lead:G[0].types[0]==="out"?1:0,total:G.reduce((a,g)=>a+g.types.length,0)}}
+function animPose(m,t,mir){const tl=m.tl;if(tl.kind==="tempo")return poseAt(m,t*tl.rate,mir);
+ const r=((t%BREATH)+BREATH)%BREATH,j=2*Math.floor(t/BREATH)+(r<BIN?0:1),u=r<BIN?r/BIN:(r-BIN)/BOUT,n=m.K.length;let p,nx;
+ if(j<tl.lead){p=m.K[0];nx=m.K[1%n]} /* a movement that starts on an out-breath settles through the first in-breath */
+ else{let q=(j-tl.lead)%tl.total,gi=0;while(q>=tl.G[gi].types.length){q-=tl.G[gi].types.length;gi++}
+  const g=tl.G[gi],dur=g.types.map(x=>x==="in"?BIN:BOUT);let el=u*dur[q];for(let k=0;k<q;k++)el+=dur[k];
+  let acc=el/dur.reduce((a,c)=>a+c,0)*g.w.reduce((a,c)=>a+c,0),ti=0;while(ti<g.tr.length-1&&acc>g.w[ti]){acc-=g.w[ti];ti++}
+  const i=g.tr[ti];p=lerpPose(m.K[i],m.K[(i+1)%n],ease(Math.min(1,acc/g.w[ti])));nx=m.K[(i+1)%n]}
+ if(mir){p=mirror(p,m.view);nx=mirror(nx,m.view)}return{p,nx}}
+MOVES.forEach(buildTimeline);
+/* a movement lasts a whole number of breaths; each side of a two-sided movement gets the same whole number */
+const quant=(id,s)=>{const unit=M[id].sides?2*BREATH:BREATH;return Math.max(1,Math.round(s/unit))*unit};
 function breathAt(m,t){const{i,x}=locate(m,t);const n=m.beats.length,lab=m.breath[i];let rem=m.beats[i]-x,el=x,j=(i+1)%n,g=0;
  while(m.breath[j]===lab&&g<n-1){rem+=m.beats[j];j=(j+1)%n;g++}j=(i-1+n)%n;g=0;while(m.breath[j]===lab&&g<n-1){el+=m.beats[j];j=(j-1+n)%n;g++}
  return{lab,rem,prog:el/(el+rem)}}
@@ -966,7 +993,7 @@ const PRESENCE={
  stance:["Feel the ground pushing back up through the legs.","Root down through the feet. Lengthen up through the crown.","Let the strength come from the legs while the upper body stays soft."],
  legs:["Feel the ground pushing back up through the legs."],
  balance:["Rest your gaze on one still point.","Small wobbles are fine. Keep returning to center."],
- breath:["Notice the cool air on the in-breath, and the warm air on the out-breath.","Let each breath be a little slower than the last.","Rest your attention at the belly, just below the navel."],
+ breath:["Notice the cool air on the in-breath, and the warm air on the out-breath.","Let each breath be smooth, even and unhurried.","Rest your attention at the belly, just below the navel."],
  meditation:["Let the breath be just as it is.","Notice sounds around you, then return to the breath.","Awareness is like the sky. Thoughts are clouds passing through."],
  selfcare:["Notice the warmth and tingling where your hands have been.","Care for the body the way you would care for someone you love."],
  animals:["Let the spirit of the animal fill the movement.","Play. There is no wrong way to be the animal."],
@@ -1026,7 +1053,7 @@ function dailyPractice(date,lenKey){const today=dkey(date),th=THEMES[date.getDay
   else{const week=Math.floor(date.getTime()/6048e5),start=(week*nMain)%L;main=Array.from({length:nMain},(_,i)=>th.ordered[(start+i)%L])}} /* a different stretch of the set each week */
  else main=fresh(th.pool).slice(0,nMain);
  main=main.filter(id=>!warm.includes(id)&&!close.includes(id));
- const ids=[...warm,...main,...close];const avail=T-PREP_FIRST-(ids.length-1)*settings.prep;
+ const ids=[...warm,...main,...close];const avail=T-overhead({items:ids});
  const w=ids.map((id,i)=>id==="zuochan"?3:i<warm.length?.65:(M[id].sides?1.4:1)*(close.includes(id)?1.2:1));const sw=w.reduce((a,b)=>a+b,0);
  const items=ids.map((id,i)=>[id,Math.max(30,Math.min(id==="zuochan"?600:240,Math.round(avail*w[i]/sw/5)*5))]);
  return{id:"daily",name:th.name,hz:th.hz,focus:th.name,feat:main[0]||ids[0],desc:th.desc,items,theme:th}}
@@ -1041,7 +1068,7 @@ function setupHero(){cancelAnimationFrame(heroAnim);const now=new Date(),hr=now.
  $("#heroGo").onclick=()=>player.start(heroR);$("#heroView").onclick=()=>openRoutine(heroR);
  const c=$("#heroCanvas"),m=M[heroR.feat];
  if(reduced){staticPose(c,m,{pad:.92});return}
- const loop=now=>{if(!player.active&&!document.hidden){const t=now/1000;const half=m.sides&&(Math.floor(t/(m.C*2))%2===1);const{p,nx}=poseAt(m,t,half);drawScene(c,m,p,{pad:.92,ghost:nx})}heroAnim=requestAnimationFrame(loop)};heroAnim=requestAnimationFrame(loop)}
+ const loop=now=>{if(!player.active&&!document.hidden){const t=now/1000;const half=m.sides&&(Math.floor(t/(4*BREATH))%2===1);const{p,nx}=animPose(m,t,half);drawScene(c,m,p,{pad:.92,ghost:nx})}heroAnim=requestAnimationFrame(loop)};heroAnim=requestAnimationFrame(loop)}
 /* a new day while the app was left open */
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&!player.active&&heroDay&&heroDay!==dkey(new Date())){setupHero();renderLog()}});
 
@@ -1074,14 +1101,14 @@ function compose(min,focus){const T=min*60;const n=Math.max(4,Math.round(T/(focu
  const close=focus==="still"?["zuochan"]:focus==="park"?["roufu","dantian"]:focus==="stretch"?(min>=12?["kneel","dantian"]:["dantian"]):min>=12?["post","dantian"]:["dantian"];
  const pool=POOLS[focus];const nm=Math.max(1,n-nw-close.length);const main=[];for(let i=0;i<nm;i++)main.push(pool[i%pool.length]);
  const warm=(focus==="calm"?["wings","neck","waist","swing"]:focus==="hips"?["swing","waist","knees","legswing"]:focus==="park"?["paida","xilian","mingtiangu","swing"]:focus==="stretch"?["swing","waist","wings","knees"]:focus==="still"?["wings","neck","wristankle"]:WARM).slice(0,nw);
- const ids=[...warm,...main,...close];const avail=T-PREP_FIRST-(ids.length-1)*settings.prep;
+ const ids=[...warm,...main,...close];const avail=T-overhead({items:ids});
  const w=ids.map(id=>id==="zuochan"?3:M[id].tags.includes("warm")?.75:LONG_HOLD.has(id)&&focus==="stretch"?1.5:(id==="post"||id==="dantian")?1.2:1);const sw=w.reduce((a,b)=>a+b,0);
  const items=ids.map((id,i)=>{let s=Math.round(avail*w[i]/sw/5)*5;s=Math.max(30,Math.min(id==="zuochan"?600:focus==="stretch"?240:180,s));return[id,s]});
  return{id:"custom",name:`${min}-minute ${FOCI.find(f=>f[0]===focus)[1].toLowerCase()} sequence`,hz:"自编",desc:"Composed for you.",items}}
 function renderCompose(){$("#cMin").value=cMin;$("#cMinOut").innerHTML=`${cMin}<span> min</span>`;
  renderChips($("#focusChips"),FOCI,cFocus,v=>{cFocus=v;store.set("cFocus",v);renderCompose()});
  composed=compose(cMin,cFocus);const ol=$("#cPlan");ol.innerHTML="";
- composed.items.forEach(([id,s])=>{const m=M[id];const li=el("li",{},`<canvas aria-hidden="true"></canvas><span class="nm">${esc(m.name)}<small>${esc(m.hz)} · ${esc(m.py)}</small></span><span class="s">${fmt(s)}</span>`);ol.appendChild(li);staticPose(li.querySelector("canvas"),m,{pad:1.1})});
+ composed.items.forEach(([id,s])=>{const m=M[id];const li=el("li",{},`<canvas aria-hidden="true"></canvas><span class="nm">${esc(m.name)}<small>${esc(m.hz)} · ${esc(m.py)}</small></span><span class="s">${fmt(quant(id,s))}</span>`);ol.appendChild(li);staticPose(li.querySelector("canvas"),m,{pad:1.1})});
  $("#cPlanMeta").textContent=`${composed.items.length} movements · ${fmtMin(routineSecs(composed))} min`}
 
 /* ---------- library ---------- */
@@ -1090,7 +1117,7 @@ function renderLib(){const tl=[["all","All"],...["breath","meditation","yjj","an
  renderChips($("#tagChips"),tl,tagF,v=>{tagF=v;renderLib()});const g=$("#lib");g.innerHTML="";
  MOVES.filter(m=>tagF==="all"||m.tags.includes(tagF)).forEach(m=>{const b=el("button",{class:"mcard",type:"button"},`<canvas aria-hidden="true"></canvas><span class="hzs">${esc(m.hz)}</span><b>${esc(m.name)}</b><small>${esc(m.py)}</small>`);
   const c=b.querySelector("canvas");const draw=staticPose(c,m,{pad:1});let raf=0;
-  const go=()=>{if(reduced)return;cancelAnimationFrame(raf);const t0=performance.now();const f=now=>{const{p,nx}=poseAt(m,(now-t0)/1000+m.beats[0]*.999);drawScene(c,m,p,{pad:1,thumb:true,ghost:nx});raf=requestAnimationFrame(f)};raf=requestAnimationFrame(f)};
+  const go=()=>{if(reduced)return;cancelAnimationFrame(raf);const t0=performance.now();const f=now=>{const{p,nx}=animPose(m,(now-t0)/1000);drawScene(c,m,p,{pad:1,thumb:true,ghost:nx});raf=requestAnimationFrame(f)};raf=requestAnimationFrame(f)};
   const stop=()=>{cancelAnimationFrame(raf);draw()};
   b.addEventListener("pointerenter",go);b.addEventListener("pointerleave",stop);b.addEventListener("focus",go);b.addEventListener("blur",stop);
   b.onclick=()=>{stop();openMove(m)};g.appendChild(b)})}
@@ -1108,10 +1135,8 @@ function openMove(m){openSheet(`<div class="pfig"><canvas id="mvC" aria-label="$
  <div class="muted" style="font-size:13px">Breath: ${breathSummary(m)}</div>
  <div><button class="btn" id="mvGo"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Practice for 1 minute</button></div></div>`);
  $("#panel .x").onclick=closeSheet;$("#mvGo").onclick=()=>{closeSheet();player.start({id:"single",name:m.name,hz:m.hz,items:[[m.id,60]]})};
- const c=$("#mvC");const t0=performance.now();const f=now=>{const t=(now-t0)/1000;const half=m.sides&&(Math.floor(t/(m.C*2))%2===1);const{p,nx}=poseAt(m,t,half);drawScene(c,m,p,{pad:.95,ghost:nx});if(!reduced)sheetAnim=requestAnimationFrame(f)};sheetAnim=requestAnimationFrame(f)}
-function breathSummary(m){const seen=[];m.breath.forEach((b,i)=>{const last=seen[seen.length-1];if(last&&last.b===b)last.s+=m.beats[i];else seen.push({b,s:m.beats[i]})});
- if(seen.length>1&&seen[0].b===seen[seen.length-1].b){seen[0].s+=seen.pop().s}
- if(seen.every(x=>x.b==="flow"))return"natural, unforced";if(seen.every(x=>x.b==="soft"))return"slow and soft, into the stretch";if(seen.every(x=>x.b==="still"))return"unforced. Let the breath breathe itself";return seen.map(x=>`${BL[x.b]} ${Math.round(x.s)}s`).join(" · ")}
+ const c=$("#mvC");const t0=performance.now();const f=now=>{const t=(now-t0)/1000;const half=m.sides&&(Math.floor(t/(4*BREATH))%2===1);const{p,nx}=animPose(m,t,half);drawScene(c,m,p,{pad:.95,ghost:nx});if(!reduced)sheetAnim=requestAnimationFrame(f)};sheetAnim=requestAnimationFrame(f)}
+function breathSummary(m){return m.tl.kind==="tempo"?`in ${BIN} s, out ${BOUT} s, the same steady rhythm all session. The movement keeps its own tempo, ${m.tl.per>1?m.tl.per+" times":"once"} per breath`:`in ${BIN} s, out ${BOUT} s, the same steady rhythm all session. The movement follows the breath`}
 const BL={in:"Inhale",out:"Exhale",hold:"Hold",flow:"Breathe naturally",soft:"Breathe into the stretch",still:"Rest in stillness"};
 function openRoutine(base){const full=fmtMin(routineSecs(base)),keep=!["daily","custom","single"].includes(base.id);
  const lo=Math.max(3,Math.min(5,full)),hi=Math.max(30,Math.min(60,full*2));let min=Math.min(hi,Math.max(lo,keep&&settings.lenFor[base.id]||full));
@@ -1125,7 +1150,7 @@ function openRoutine(base){const full=fmtMin(routineSecs(base)),keep=!["daily","
   $("#rMeta").innerHTML=`<span><b class="num">${fmtMin(secs)}</b> min</span><span><b class="num">${r.items.length}</b> movements</span><span>Focus: <b>${esc(r.focus||"")}</b></span>`;
   $("#rLenNote").textContent=min===full?"As designed":`Every movement ×${f.toFixed(2).replace(/0$/,"")}`;$("#rLenReset").setAttribute("aria-pressed",String(min===full));
   const ol=$("#rPlan");ol.innerHTML="";
-  r.items.forEach(([id,s])=>{const m=M[id];const li=el("li",{},`<canvas aria-hidden="true"></canvas><span class="nm">${esc(m.name)}<small>${esc(m.hz)} · ${esc(m.py)}${m.sides?" · both sides":""}</small></span><span class="s">${fmt(s)}</span>`);ol.appendChild(li);
+  r.items.forEach(([id,s])=>{const m=M[id];const li=el("li",{},`<canvas aria-hidden="true"></canvas><span class="nm">${esc(m.name)}<small>${esc(m.hz)} · ${esc(m.py)}${m.sides?" · both sides":""}</small></span><span class="s">${fmt(quant(id,s))}</span>`);ol.appendChild(li);
    requestAnimationFrame(()=>drawScene(li.querySelector("canvas"),m,poseAt(m,m.beats[0]*.999).p,{pad:1.1,thumb:true}))})};
  const set=v=>{min=v;$("#rLen").value=v;if(keep){settings.lenFor[base.id]=v;saveSettings()}draw()};
  $("#rLen").addEventListener("input",e=>set(+e.target.value));$("#rLenReset").onclick=()=>set(full);draw();
@@ -1133,10 +1158,10 @@ function openRoutine(base){const full=fmtMin(routineSecs(base)),keep=!["daily","
 
 /* ---------- player ---------- */
 const player={active:false,segs:[],si:0,t:0,running:false,raf:0,last:0,practiced:0,wake:null,routine:null,
- start(r){ac();this.routine=r;this.segs=[];this.arrive=r.items.length>1;if(this.arrive)this.segs.push({kind:"arrive",m:M[r.items[0][0]],dur:ARRIVE,idx:-1});r.items.forEach(([id,s],i)=>{this.segs.push({kind:"prep",m:M[id],dur:i===0?PREP_FIRST:settings.prep,idx:i});this.segs.push({kind:"move",m:M[id],dur:s,idx:i})});
+ start(r){ac();this.routine=r;this.segs=[];this.arrive=r.items.length>1;if(this.arrive)this.segs.push({kind:"arrive",m:M[r.items[0][0]],dur:ARRIVE,idx:-1});r.items.forEach(([id,s],i)=>{this.segs.push({kind:"prep",m:M[id],dur:i===0?PREP_FIRST:PREP,idx:i});this.segs.push({kind:"move",m:M[id],dur:quant(id,s),idx:i})});
   this.total=this.segs.reduce((a,s)=>a+s.dur,0);this.si=0;this.t=0;this.practiced=0;this.recorded=false;this.idsDone=new Set();this.usedPres=new Set();this.active=true;this.running=true;
   $("#player").hidden=false;$("#plDone").hidden=true;document.body.style.overflow="hidden";$("#plRoutine").textContent=r.name;
-  const bar=$("#plBar");bar.innerHTML="";r.items.forEach(([,s])=>{const d=el("div");d.style.flex=String(s);d.appendChild(el("i"));bar.appendChild(d)});
+  const bar=$("#plBar");bar.innerHTML="";r.items.forEach(([id,s])=>{const d=el("div");d.style.flex=String(quant(id,s));d.appendChild(el("i"));bar.appendChild(d)});
   this.syncToggles();this.enter(true);this.lockWake();this.last=performance.now();cancelAnimationFrame(this.raf);this.raf=requestAnimationFrame(n=>this.frame(n));$("#plPlay").focus()},
  async lockWake(){try{if("wakeLock" in navigator)this.wake=await navigator.wakeLock.request("screen")}catch(e){this.wake=null}},
  seg(){return this.segs[this.si]},
@@ -1158,19 +1183,20 @@ const player={active:false,segs:[],si:0,t:0,running:false,raf:0,last:0,practiced
   if(this.running&&this.active){const g=this.seg();const a=this.t;this.t+=dt;if(g.kind==="move")this.practiced+=dt;this.events(g,a,this.t);if(this.t>=g.dur)this.next()}
   if(this.active){this.render();this.raf=requestAnimationFrame(n=>this.frame(n))}},
  events(g,a,b){const cross=x=>a<x&&b>=x;
-  if(g.kind==="arrive"){if(cross(6))say("Breathe in.",false,{caption:false,rate:.72});if(cross(10.5))say("And slowly out.",false,{caption:false,rate:.72});
-   if(cross(18)){bowl(.45);say("Let's begin.",false)}return}
+  if(g.kind==="arrive"){if(cross(BREATH))say("Breathe in.",false,{caption:false,rate:.72});if(cross(BREATH+BIN))say("And slowly out.",false,{caption:false,rate:.72});
+   if(cross(2*BREATH))say("In.",false,{caption:false,rate:.72});if(cross(2*BREATH+BIN))say("And out.",false,{caption:false,rate:.72});return}
   if(g.kind==="move")this.breathCue(g,b);
   if(g.kind==="prep"){[3,2,1].forEach(k=>{if(cross(g.dur-k))tick(false)})}
   else{(this.cuePlan||[]).forEach(c=>{if(cross(c.t))say(c.text,c.int);});if(g.m.sides&&cross(g.dur/2)){bowl(.5);$("#plPhase").textContent="Side two"}if(g.m.bellEvery)for(let k=g.m.bellEvery;k<g.dur-8;k+=g.m.bellEvery)if(cross(k))bowl(.3)}},
  /* spoken breath coaching: every breath for the first three cycles of a movement (or side), then every other cycle */
- breathCue(g,t){if(!settings.breath||!settings.voice||g.m.fixedPace)return;const m=g.m,half=m.sides&&t>=g.dur/2,lt=half?t-g.dur/2:t;
+ breathCue(g,t){if(!settings.breath||!settings.voice)return;const m=g.m,half=m.sides&&t>=g.dur/2,lt=half?t-g.dur/2:t;
   const side=half?1:0;if(this.breathSide!==side){this.breathSide=side;this.breathN=0;this.prevLab=null}
-  const bi=breathAt(m,lt);if(bi.lab===this.prevLab)return;this.prevLab=bi.lab;
-  if(!["in","out","hold"].includes(bi.lab)||bi.rem<1.6||g.dur-t<3)return;const n=this.breathN,opening=n===0&&t<1;
-  if(n>=6&&Math.floor(lt/m.C)%2===1)return; /* after six spoken breaths, coach every other cycle */
+  const bi=breathPhase(lt);if(bi.lab===this.prevLab)return;this.prevLab=bi.lab;
+  if(g.dur-t<3)return;const n=this.breathN,opening=n===0&&t<1;
+  if(m.tags.includes("meditation")&&n>=4)return; /* in meditation the breath is guided only at the start */
+  if(n>=6&&bi.n%2===1)return; /* after six spoken breaths, coach every other breath */
   if(!opening&&speaking())return;if((this.cuePlan||[]).some(c=>Math.abs(c.t-t)<2.5))return;
-  const first=n<2;let word=bi.lab==="in"?(first?"Breathe in":"In"):bi.lab==="out"?(m.sound?`Out, ${m.sound}`:first?"Breathe out":"Out"):"Hold, softly";
+  const first=n<2;let word=bi.lab==="in"?(first?"Breathe in":"In"):(m.sound?`Out, ${m.sound}`:first?"Breathe out":"Out");
   if(opening)word=`Begin${m.sides?", first side":""}. ${word}`;this.breathN++;
   say(word,false,{caption:opening?word+".":false,rate:.72})},
  next(){if(this.si>=this.segs.length-1){this.finish();return}this.si++;this.t=0;this.enter(false)},
@@ -1188,26 +1214,24 @@ const player={active:false,segs:[],si:0,t:0,running:false,raf:0,last:0,practiced
   $("#player").hidden=true;document.body.style.overflow=""},
  syncToggles(){$("#plBreathBtn").setAttribute("aria-pressed",String(settings.breath));$("#tBreath").setAttribute("aria-pressed",String(settings.breath));$("#plVoice").setAttribute("aria-pressed",String(settings.voice));$("#plBell").setAttribute("aria-pressed",String(settings.bell));$("#tVoice").setAttribute("aria-pressed",String(settings.voice));$("#tBell").setAttribute("aria-pressed",String(settings.bell))},
  render(){const g=this.seg();if(!g)return;const m=g.m;const c=$("#plCanvas");let pose,ghost,bi;
-  if(g.kind==="prep"||g.kind==="arrive"){pose=m.K[0];ghost=null;bi=null}
-  if(g.kind==="arrive"&&this.t>=6&&this.t<17){const x=this.t-6,inh=x<4.5;bi={lab:inh?"in":"out",rem:inh?4.5-x:11-x,prog:inh?x/4.5:(x-4.5)/6.5}}
-  else{const half=m.sides&&this.t>=g.dur/2;const lt=half?this.t-g.dur/2:this.t;const r=poseAt(m,lt,half);pose=r.p;ghost=r.nx;bi=breathAt(m,lt);if(m.count)bi.count=Math.floor(lt/m.C)%m.count+1}
+  if(g.kind!=="move"){pose=m.K[0];ghost=null;bi=breathPhase(this.t)}
+  else{const half=m.sides&&this.t>=g.dur/2;const lt=half?this.t-g.dur/2:this.t;const r=animPose(m,lt,half);pose=r.p;ghost=r.nx;bi=breathPhase(lt);if(m.count)bi.count=bi.n%m.count+1}
   drawScene(c,m,pose,{pad:.78,ghost,ring:g.kind==="move"?Math.min(1,this.t/g.dur):0});
   $("#plTime").textContent=fmt(g.dur-this.t);
   let done=0;for(let i=0;i<this.si;i++)done+=this.segs[i].dur;done+=this.t;$("#plRemain").textContent=fmt(this.total-done)+" remaining";
   const bars=$("#plBar").children;for(let i=0;i<bars.length;i++){const fi=bars[i].firstChild;let f=0;if(i<g.idx)f=1;else if(i===g.idx&&g.kind==="move")f=this.t/g.dur;fi.style.width=(f*100)+"%"}
   const orb=$("#plOrb");
   if(g.kind==="move"){const left=g.dur-this.t,soon=left<=10,nw=$("#plNextWrap");$("#plNextIn").textContent="in "+fmt(left);nw.classList.toggle("soon",soon);
-   if(soon&&this.nextM&&!reduced)drawScene($("#plNextC"),this.nextM,poseAt(this.nextM,this.t).p,{pad:1.1,thumb:true})}
-  if(!bi){this.glow(.62);$("#plBreath").textContent=g.kind==="move"?"":"Settle";$("#plBreathN").textContent=g.kind==="move"?"":"Starting in "+Math.ceil(g.dur-this.t);orb.style.transform="scale(.7)";return}
-  $("#plBreath").textContent=BL[bi.lab];$("#plBreathN").textContent=g.kind==="arrive"?Math.ceil(bi.rem)+"":bi.count?`Count ${bi.count} of ${m.count}`:bi.lab==="flow"?"Steady and easy":bi.lab==="soft"?"Long, slow breaths":bi.lab==="still"?"Nothing to do but sit":Math.ceil(bi.rem)+"";
-  let sc=bi.lab==="soft"||bi.lab==="still"?.72+.18*Math.sin(this.t*.75):.78+.08*Math.sin(this.t*1.6);if(bi.lab==="in")sc=.55+.45*ease(bi.prog);else if(bi.lab==="out")sc=1-.45*ease(bi.prog);else if(bi.lab==="hold")sc=1;orb.style.transform=`scale(${sc.toFixed(3)})`;this.glow(sc)},
+   if(soon&&this.nextM&&!reduced)drawScene($("#plNextC"),this.nextM,animPose(this.nextM,this.t).p,{pad:1.1,thumb:true})}
+  $("#plBreath").textContent=BL[bi.lab];$("#plBreathN").textContent=bi.count?`${Math.ceil(bi.rem)} · count ${bi.count}/${m.count}`:Math.ceil(bi.rem)+"";
+  const sc=bi.lab==="in"?.55+.45*ease(bi.prog):1-.45*ease(bi.prog);orb.style.transform=`scale(${sc.toFixed(3)})`;this.glow(sc)},
  glow(sc){const k=Math.max(0,Math.min(1,(sc-.55)/.45)),el=$("#plGlow");el.style.opacity=(.08+.92*k).toFixed(3);if(!reduced)el.style.transform=`scale(${(.72+.5*k).toFixed(3)})`}
 };
 function nextIntro(m,first){return`${first?"First":"Next"}: ${m.name}. ${m.setup}`}
 function planCues(g){const m=g.m,d=g.dur,out=[];const lines=[];m.cues.forEach(c=>{lines.push(c);lines.push(presenceFor(m,player.usedPres))});
  /* with breath coaching, "Begin" rides on the first breath word and form cues wait until the first breath cycle has been guided */
- const coached=settings.breath&&settings.voice&&m.breath.some(b=>b==="in"||b==="out");if(!coached)out.push({t:.4,text:"Begin."+(m.sides?" First side.":""),int:false});
- const t0=coached?Math.min(Math.max(6,m.C+1),14):6;
+ const coached=settings.breath&&settings.voice;if(!coached)out.push({t:.4,text:"Begin."+(m.sides?" First side.":""),int:false});
+ const t0=coached?BREATH+1:6; /* the first breath is guided before any form cue */
  const marks=[];if(m.sides)marks.push(d/2);if(d>=35)marks.push(d-10);
  const iv=m.cueGap||Math.max(15,Math.min(28,d/(m.cues.length+1)));let k=0;
  const med=m.tags.includes("meditation");for(let t=t0;t<d-6&&k<lines.length*(med?1:2);t+=iv){if(marks.some(x=>Math.abs(x-t)<6))continue;out.push({t,text:lines[k%lines.length]});k++}
@@ -1260,6 +1284,6 @@ if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){
  navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{})}
 
 readColors();player.syncToggles();renderLog();setupHero();renderRoutines();renderCompose();renderLib();
-window.__dm={MOVES,ROUTINES,solve,poseAt,drawScene,player,dailyPractice,routineSecs};
+window.__dm={MOVES,ROUTINES,solve,poseAt,animPose,breathPhase,quant,drawScene,player,dailyPractice,routineSecs};
 })();
 </script>
